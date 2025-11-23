@@ -13,7 +13,7 @@
     decimal shippingCost = 0;
     if (Model.Customer?.Province != null)
     {
-        shippingCost = Model.Customer.Province.Equals("Alajuela", StringComparison.OrdinalIgnoreCase) ? 0 : 1500;
+        shippingCost = Model.Customer.Province.Equals("Alajuela", StringComparison.OrdinalIgnoreCase) ? 0 : 3200;
     }
 
     decimal total = subtotal + shippingCost;
