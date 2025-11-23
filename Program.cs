@@ -5,9 +5,13 @@ using Susurros_del_Cafe_WEB.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 🆕 CONFIGURACIÓN PARA RAILWAY
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(int.Parse(port));
+});
+
+Console.WriteLine($"🚀 Starting application on port {port}");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
