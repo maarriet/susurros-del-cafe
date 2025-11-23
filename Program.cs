@@ -1,33 +1,36 @@
-﻿// Program.cs
-using Susurros_del_Cafe_WEB.Data;
-using Susurros_del_Cafe_WEB.Models;
-using Susurros_del_Cafe_WEB.Services;
 using Microsoft.EntityFrameworkCore;
+using Susurros_del_Cafe_WEB.Data;
+using Susurros_del_Cafe_WEB.Services;
+using Susurros_del_Cafe_WEB.Models;
 
+var builder = WebApplication.CreateBuilder(args);
 
 // 🆕 CONFIGURACIÓN PARA RAILWAY
 var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
-var builder = WebApplication.CreateBuilder(args);
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Add services to the container
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// 🆕 CONFIGURACIÓN DE BASE DE DATOS PARA RAILWAY
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+// Usar PostgreSQL en producción, SQLite en desarrollo
+if (Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT") != null)
+{
+    // Producción - PostgreSQL
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+}
+else
+{
+    // Desarrollo - SQLite
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(connectionString ?? "Data Source=susurros_cafe.db"));
+}
 
-
-// Your custom services
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-
-
+// Configurar sesiones
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -35,85 +38,48 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Registrar servicios
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Configurar EmailSettings (si las usas)
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 var app = builder.Build();
 
-
-// ✅ ESTA SECCIÓN ES CRÍTICA PARA CREAR LA DB
-using (var scope = app.Services.CreateScope())
+// 🆕 CREAR BASE DE DATOS EN RAILWAY
+if (Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT") != null)
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        Console.WriteLine("🗄️ Intentando crear base de datos...");
-
-        // Crear la base de datos y todas las tablas
-        bool created = context.Database.EnsureCreated();
-
-        if (created)
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        try
         {
-            Console.WriteLine("✅ Base de datos creada exitosamente");
+            context.Database.EnsureCreated();
+            Console.WriteLine("✅ Database created successfully");
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("✅ Base de datos ya existe");
+            Console.WriteLine($"❌ Database creation failed: {ex.Message}");
         }
-
-        // Verificar si hay productos, si no, crear algunos
-        if (!context.Products.Any())
-        {
-            var products = new List<Product>
-            {
-                new Product
-                {
-                    Name = "Café Susurros 250g",
-                    Price = 2500,
-                    Description = "Café artesanal 250g - Perfecto para disfrutar en casa"
-                },
-                new Product
-                {
-                    Name = "Café Susurros 500g",
-                    Price = 4500,
-                    Description = "Café artesanal 500g - Ideal para familias cafeteras"
-                }
-            };
-
-            context.Products.AddRange(products);
-            context.SaveChanges();
-            Console.WriteLine($"✅ Se crearon {products.Count} productos iniciales");
-        }
-        else
-        {
-            Console.WriteLine($"✅ Ya existen {context.Products.Count()} productos");
-        }
-
-        // Verificar que el archivo se creó
-        var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "susurros_cafe.db");
-        if (File.Exists(dbPath))
-        {
-            Console.WriteLine($"✅ Archivo de base de datos confirmado en: {dbPath}");
-        }
-        else
-        {
-            Console.WriteLine($"❌ Archivo de base de datos NO encontrado en: {dbPath}");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ Error inicializando DB: {ex.Message}");
-        Console.WriteLine($"Detalles: {ex.InnerException?.Message}");
-        Console.WriteLine($"StackTrace: {ex.StackTrace}");
     }
 }
 
-// Configure the HTTP request pipeline
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    // No usar HTTPS en Railway
 }
-app.UseSession();
-app.UseHttpsRedirection();
+
+// No redirigir HTTPS en Railway para evitar problemas
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
 
@@ -121,5 +87,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-Console.WriteLine("🚀 Susurros del Café iniciando...");
+Console.WriteLine($"🚀 Starting application on port {port}");
 app.Run();
