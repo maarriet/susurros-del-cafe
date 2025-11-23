@@ -4,12 +4,17 @@ using Susurros_del_Cafe_WEB.Models;
 using Susurros_del_Cafe_WEB.Services;
 using Microsoft.EntityFrameworkCore;
 
+// Add services to the container
+builder.Services.AddControllersWithViews();
+// 🆕 CONFIGURACIÓN PARA RAILWAY
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container
-builder.Services.AddControllersWithViews();
+
 
 // Database
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
