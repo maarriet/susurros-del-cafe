@@ -5,16 +5,44 @@
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
+        <!-- Banner Cosecha 2025 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="cosecha-banner text-center fade-in-up">
+                    <span class="cosecha-badge">🌱 COSECHA 2025 - EDICIÓN LIMITADA 🌱</span>
+                    <p class="cosecha-text mb-0">Stock limitado disponible • Reserva antes que se agoten</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row align-items-center min-vh-75">
             <div class="col-lg-6 hero-content">
                 <h1 class="hero-title fade-in-up">Susurros del Café</h1>
-                <p class="hero-subtitle fade-in-up">Café artesanal premium de Costa Rica. Cada grano seleccionado a mano, tostado con maestría, entregado con pasión.</p>
+                <p class="hero-subtitle fade-in-up">
+                    Café artesanal premium de Costa Rica. Cada grano seleccionado a mano, tostado con maestría, entregado con pasión.
+                </p>
+
+                <!-- Características destacadas -->
+                <div class="hero-features fade-in-up mb-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge">🌱 Cosecha 2025</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge stock-limitado">📦 Stock Limitado</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge">🚚 Envío Nacional</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="hero-actions fade-in-up">
                     <a href="@Url.Action("Create", "Order")" class="btn btn-coffee btn-lg me-3">
-                        Hacer Pedido
+                        <i class="fas fa-shopping-cart me-2"></i>Hacer Pedido
                     </a>
                     <a href="#productos" class="btn btn-coffee-outline btn-lg">
-                        Ver Productos
+                        <i class="fas fa-eye me-2"></i>Ver Productos
                     </a>
                 </div>
             </div>
