@@ -5,13 +5,21 @@ using Susurros_del_Cafe_WEB.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
-builder.WebHost.ConfigureKestrel(options =>
+// 🆕 CONFIGURACIÓN DE PUERTO PARA RAILWAY
+builder.WebHost.ConfigureKestrel(serverOptions =>
 {
-    options.ListenAnyIP(int.Parse(port));
+    var port = Environment.GetEnvironmentVariable("PORT");
+    if (!string.IsNullOrEmpty(port) && int.TryParse(port, out int railwayPort))
+    {
+        serverOptions.ListenAnyIP(railwayPort);
+        Console.WriteLine($"🚀 Railway port configured: {railwayPort}");
+    }
+    else
+    {
+        serverOptions.ListenAnyIP(5000);
+        Console.WriteLine("🏠 Development port: 5000");
+    }
 });
-
-Console.WriteLine($"🚀 Starting application on port {port}");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -34,7 +42,22 @@ else
         options.UseSqlite(connectionString ?? "Data Source=susurros_cafe.db"));
 }
 
-// ... resto igual hasta...
+// Configurar sesiones
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(2);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Registrar servicios
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+// Configurar EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+var app = builder.Build();
 
 // 🆕 CREAR BASE DE DATOS EN RAILWAY
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
@@ -58,10 +81,9 @@ if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // No usar HTTPS en Railway
 }
 
-// No redirigir HTTPS en Railway para evitar problemas
+// Solo HTTPS en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -76,5 +98,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-Console.WriteLine($"🚀 Starting application on port {port}");
+Console.WriteLine("🚀 Susurros del Café starting...");
 app.Run();
