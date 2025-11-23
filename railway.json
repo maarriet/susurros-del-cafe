@@ -4,6 +4,7 @@
   },
   "deploy": {
     "startCommand": "dotnet Susurros_del_Cafe_WEB.dll",
-    "healthcheckPath": "/"
+    "healthcheckPath": "/",
+    "healthcheckTimeout": 300
   }
 }
