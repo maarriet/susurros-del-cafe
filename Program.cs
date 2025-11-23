@@ -17,7 +17,7 @@ var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
     ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
 // Usar PostgreSQL en producción, SQLite en desarrollo
-if (Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT") != null)
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
 {
     // Producción - PostgreSQL
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -48,7 +48,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 var app = builder.Build();
 
 // 🆕 CREAR BASE DE DATOS EN RAILWAY
-if (Environment.GetEnvironmentVariable("RAILWAY_ENVIRONMENT") != null)
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
 {
     using (var scope = app.Services.CreateScope())
     {
