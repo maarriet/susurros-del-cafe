@@ -1,0 +1,178 @@
+﻿@model Susurros_del_Cafe_WEB.Models.Order
+@{
+    ViewData["Title"] = "Confirmación de Pedido";
+
+    // Calcular totales correctamente
+    decimal subtotal = 0;
+    if (Model.OrderItems != null && Model.OrderItems.Any())
+    {
+        subtotal = Model.OrderItems.Sum(item => item.Quantity * item.UnitPrice);
+    }
+
+    // Calcular envío correctamente
+    decimal shippingCost = 0;
+    if (Model.Customer?.Province != null)
+    {
+        shippingCost = Model.Customer.Province.Equals("Alajuela", StringComparison.OrdinalIgnoreCase) ? 0 : 1500;
+    }
+
+    decimal total = subtotal + shippingCost;
+}
+
+<!-- Hero Section -->
+<section style="background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-rich) 100%); padding: 3rem 0; color: white;">
+    <div class="container text-center">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+        <h1 class="display-4 mb-3" style="font-weight: 700;">¡Pedido Confirmado!</h1>
+        <p class="lead" style="opacity: 0.9;">Gracias por tu pedido, @Model.Customer?.Name</p>
+        <p style="font-size: 1.2rem; opacity: 0.8;">Número de pedido: <strong>#@Model.Id</strong></p>
+    </div>
+</section>
+
+<div class="container" style="margin-top: -2rem; margin-bottom: 4rem;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Información del Pedido -->
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none; margin-bottom: 2rem;">
+                <div class="card-body" style="padding: 3rem;">
+                    <h5 style="color: var(--coffee-dark); margin-bottom: 2rem;">
+                        <i class="fas fa-info-circle me-2"></i>Detalles del Pedido
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Fecha:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                            <p><strong>Estado:</strong> <span class="badge bg-success">Confirmado</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Método de pago:</strong> Efectivo contra entrega</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Pedidos -->
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none; margin-bottom: 2rem;">
+                <div class="card-body" style="padding: 3rem;">
+                    <h5 style="color: var(--coffee-dark); margin-bottom: 2rem;">
+                        <i class="fas fa-shopping-bag me-2"></i>Productos Pedidos
+                    </h5>
+
+                    @if (Model.OrderItems != null && Model.OrderItems.Any())
+                    {
+                        @foreach (var item in Model.OrderItems)
+                        {
+                            var itemSubtotal = item.Quantity * item.UnitPrice;
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3" style="background: #f8f9fa; border-radius: 12px;">
+                                <div>
+                                    <h6 class="mb-1">@item.Product.Name</h6>
+                                    <small class="text-muted">₡@item.UnitPrice.ToString("N0") c/u</small>
+                                </div>
+                                <div class="text-end">
+                                    <div><strong>x@(item.Quantity)</strong></div>
+                                    <div style="color: var(--coffee-primary); font-weight: bold;">
+                                        ₡@(itemSubtotal.ToString("N0"))
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">No hay productos en este pedido.</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Información de Entrega -->
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none; margin-bottom: 2rem;">
+                <div class="card-body" style="padding: 3rem;">
+                    <h5 style="color: var(--coffee-dark); margin-bottom: 2rem;">
+                        <i class="fas fa-map-marker-alt me-2"></i>Información de Entrega
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p><strong>Dirección:</strong><br>@Model.Customer?.Address</p>
+                            <p><strong>Provincia:</strong> @Model.Customer?.Province</p>
+                            <p><strong>Teléfono:</strong> @Model.Customer?.Phone</p>
+                        </div>
+                        <div class="col-md-4">
+                            <!-- Resumen de Totales -->
+                            <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 12px;">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span><strong>₡@(subtotal.ToString("N0"))</strong></span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Envío:</span>
+                                    <span>
+                                        @if (shippingCost == 0)
+                                        {
+                                            <strong style="color: green;">¡Gratis!</strong>
+                                        }
+                                        else
+                                        {
+                                            <strong>₡@(shippingCost.ToString("N0"))</strong>
+                                        }
+                                    </span>
+                                </div>
+                                @if (shippingCost == 0)
+                                {
+                                    <small class="text-success d-block mb-2">✅ Envío gratis a Alajuela</small>
+                                }
+                                else
+                                {
+                                    <small class="text-info d-block mb-2">📦 Envío a @Model.Customer?.Province</small>
+                                }
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <span style="font-size: 1.2rem;"><strong>Total:</strong></span>
+                                    <span style="font-size: 1.4rem; color: var(--coffee-primary);"><strong>₡@(total.ToString("N0"))</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos Pasos -->
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none;">
+                <div class="card-body" style="padding: 3rem;">
+                    <h5 style="color: var(--coffee-dark); margin-bottom: 2rem;">
+                        <i class="fas fa-clock me-2"></i>Próximos Pasos
+                    </h5>
+
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div style="font-size: 2.5rem; color: var(--coffee-secondary); margin-bottom: 1rem;">📞</div>
+                            <h6>Te contactaremos</h6>
+                            <p class="small text-muted">En las próximas horas para confirmar tu pedido</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div style="font-size: 2.5rem; color: var(--coffee-secondary); margin-bottom: 1rem;">☕</div>
+                            <h6>Preparamos tu café</h6>
+                            <p class="small text-muted">Tostado fresco y empacado con amor</p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div style="font-size: 2.5rem; color: var(--coffee-secondary); margin-bottom: 1rem;">🚚</div>
+                            <h6>Entrega</h6>
+                            <p class="small text-muted">En 48-76 horas en tu dirección</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="text-center mt-4">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-coffee btn-lg me-3" style="padding: 1rem 2rem;">
+                    <i class="fas fa-home me-2"></i>Volver al Inicio
+                </a>
+                <a href="@Url.Action("Create", "Order")" class="btn btn-outline-secondary btn-lg" style="padding: 1rem 2rem;">
+                    <i class="fas fa-plus me-2"></i>Hacer Otro Pedido
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

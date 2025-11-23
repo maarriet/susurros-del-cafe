@@ -1,0 +1,79 @@
+﻿/* wwwroot/css/admin-login.css */
+
+/* Animación para el formulario */
+.login-card {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efecto hover en el botón */
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 69, 19, 0.4);
+    transition: all 0.3s ease;
+}
+
+/* Efecto focus en el input */
+.login-input:focus {
+    border-color: var(--coffee-primary);
+    box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+}
+
+/* Estilos adicionales */
+.login-section {
+    background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-rich) 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.login-card-container {
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.login-header {
+    background: linear-gradient(135deg, var(--coffee-primary), var(--coffee-secondary));
+    color: white;
+    border-radius: 20px 20px 0 0;
+    padding: 2rem;
+}
+
+.login-body {
+    padding: 3rem;
+}
+
+.login-alert {
+    border-radius: 15px;
+    border: none;
+}
+
+.login-form-control {
+    border-radius: 15px;
+    padding: 15px;
+    border: 2px solid var(--coffee-neutral);
+    font-size: 1.1rem;
+}
+
+.login-btn {
+    background: linear-gradient(135deg, var(--coffee-primary), var(--coffee-secondary));
+    color: white;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+}

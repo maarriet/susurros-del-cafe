@@ -1,0 +1,269 @@
+﻿@model Susurros_del_Cafe_WEB.ViewModels.OrderViewModel
+@{
+    ViewData["Title"] = "Realizar Pedido";
+}
+
+<!-- Hero Section del Pedido -->
+<section style="background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-rich) 100%); padding: 3rem 0; color: white;">
+    <div class="container text-center">
+        <h1 class="display-4 mb-3" style="font-weight: 700;">Realizar Pedido</h1>
+        <p class="lead" style="opacity: 0.9;">Selecciona tus productos y completa tu información para recibir el mejor café artesanal</p>
+    </div>
+</section>
+
+<div class="container" style="margin-top: -2rem; margin-bottom: 4rem;">
+    <div class="row">
+        <!-- Formulario Principal -->
+        <div class="col-lg-8">
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none; background: white;">
+                <div class="card-body" style="padding: 3rem;">
+                    <form asp-action="Create" method="post" id="orderForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 15px;"></div>
+
+                        <!-- Sección de Productos en el formulario -->
+                        <div class="row g-4">
+                            <!-- Producto 250g -->
+                            <div class="col-md-6">
+                                <div class="product-card h-100" style="padding: 2rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <!-- Imagen real del producto -->
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-250g.jpg"
+                                                 alt="Café Susurros 250g"
+                                                 class="order-product-image"
+                                                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h5 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Café Susurros 250g</h5>
+                                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">Perfecto para disfrutar en casa</p>
+                                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1.5rem;">₡2,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity250g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="Quantity250g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity250g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="Quantity250g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Producto 500g -->
+                            <div class="col-md-6">
+                                <div class="product-card h-100" style="padding: 2rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <!-- Imagen real del producto -->
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-500g.jpg"
+                                                 alt="Café Susurros 500g"
+                                                 class="order-product-image"
+                                                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h5 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Café Susurros 500g</h5>
+                                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">Ideal para familias cafeteras</p>
+                                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1.5rem;">₡4,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity500g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="Quantity500g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity500g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="Quantity500g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información del Cliente -->
+                        <div class="mb-5">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="fas fa-user" style="font-size: 1.5rem; color: var(--coffee-secondary); margin-right: 0.75rem;"></i>
+                                <h4 class="mb-0" style="color: var(--coffee-dark);">Información de Contacto</h4>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="CustomerName" class="form-label"></label>
+                                    <input asp-for="CustomerName" class="form-control" placeholder="Tu nombre completo" />
+                                    <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="CustomerEmail" class="form-label">
+                                        <i class="fas fa-envelope me-2"></i>Correo Electrónico *
+                                    </label>
+                                    <input type="email" class="form-control" id="CustomerEmail" name="CustomerEmail" required
+                                           placeholder="ejemplo@gmail.com">
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="CustomerPhone" class="form-label"></label>
+                                    <input asp-for="CustomerPhone" class="form-control" placeholder="8888-8888" />
+                                    <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Información de Entrega -->
+                        <div class="mb-5">
+                            <div class="d-flex align-items-center mb-4">
+                                <i class="fas fa-map-marker-alt" style="font-size: 1.5rem; color: var(--coffee-secondary); margin-right: 0.75rem;"></i>
+                                <h4 class="mb-0" style="color: var(--coffee-dark);">Información de Entrega</h4>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label asp-for="Province" class="form-label"></label>
+                                    <select asp-for="Province" class="form-select" id="Province">
+                                        <option value="">Seleccione una provincia</option>
+                                        <option value="Alajuela">Alajuela</option>
+                                        <option value="San José">San José</option>
+                                        <option value="Cartago">Cartago</option>
+                                        <option value="Heredia">Heredia</option>
+                                        <option value="Guanacaste">Guanacaste</option>
+                                        <option value="Puntarenas">Puntarenas</option>
+                                        <option value="Limón">Limón</option>
+                                    </select>
+                                    <span asp-validation-for="Province" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="PaymentMethod" class="form-label"></label>
+                                    <select asp-for="PaymentMethod" class="form-select">
+                                        <option value="">Seleccione método de pago</option>
+                                        <option value="1">Efectivo contra entrega</option>
+                                        <option value="2">SINPE Móvil</option>
+                                    </select>
+                                    <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <label asp-for="CustomerAddress" class="form-label"></label>
+                                <textarea asp-for="CustomerAddress" class="form-control" rows="3" placeholder="Dirección completa de entrega..."></textarea>
+                                <span asp-validation-for="CustomerAddress" class="text-danger small"></span>
+                            </div>
+
+                            <div class="mt-3">
+                                <label asp-for="Comments" class="form-label">Comentarios Adicionales (Opcional)</label>
+                                <textarea asp-for="Comments" class="form-control" rows="2" placeholder="Instrucciones especiales, referencias, etc..."></textarea>
+                                <span asp-validation-for="Comments" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Botón de Envío -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-coffee btn-lg" style="padding: 1rem 3rem; font-size: 1.1rem;">
+                                <i class="fas fa-check-circle me-2"></i>Confirmar Pedido
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resumen del Pedido -->
+        <div class="col-lg-4">
+            <div class="order-summary" id="order-summary" style="display: none;">
+                <div class="summary-header">
+                    <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Resumen del Pedido</h5>
+                </div>
+                <div class="card-body" style="padding: 2rem;">
+                    <!-- Items del pedido -->
+                    <div id="item-250" style="display: none;">
+                        <div class="summary-item">
+                            <span>Café 250g x<span id="summary-qty-250">0</span></span>
+                            <span id="summary-price-250">₡0</span>
+                        </div>
+                    </div>
+                    <div id="item-500" style="display: none;">
+                        <div class="summary-item">
+                            <span>Café 500g x<span id="summary-qty-500">0</span></span>
+                            <span id="summary-price-500">₡0</span>
+                        </div>
+                    </div>
+
+                    <hr style="border-color: var(--coffee-light);">
+
+                    <!-- Totales -->
+                    <div class="summary-item">
+                        <span>Subtotal:</span>
+                        <span id="summary-subtotal">₡0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Envío:</span>
+                        <span id="summary-shipping">₡0</span>
+                    </div>
+                    <div class="small text-muted mb-3" id="shipping-info"></div>
+
+                    <div class="summary-total">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span style="font-size: 1.2rem;">Total:</span>
+                            <span id="summary-total" style="font-size: 1.4rem; color: var(--coffee-primary);">₡0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="card mt-4" style="border-radius: 16px; border: 1px solid var(--coffee-light);">
+                <div class="card-body" style="padding: 2rem;">
+                    <h6 style="color: var(--coffee-dark); margin-bottom: 1rem;">
+                        <i class="fas fa-info-circle me-2" style="color: var(--coffee-secondary);"></i>
+                        Información Importante
+                    </h6>
+                    <ul class="list-unstyled small" style="color: var(--text-light); line-height: 1.6;">
+                        <li class="mb-2"><i class="fas fa-truck me-2" style="color: var(--coffee-secondary);"></i>Envío gratis a alrededores de Alajuela centro</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2" style="color: var(--coffee-secondary);"></i>Te contactaremos para confirmar</li>
+                        <li class="mb-2"><i class="fas fa-clock me-2" style="color: var(--coffee-secondary);"></i>Entrega en 48-76 horas</li>
+                        <li><i class="fas fa-shield-alt me-2" style="color: var(--coffee-secondary);"></i>Garantía de frescura</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/order-calculator.js"></script>
+    <script>
+        function changeQuantity(inputId, change) {
+            const input = document.getElementById(inputId);
+            const currentValue = parseInt(input.value) || 0;
+            const newValue = Math.max(0, Math.min(50, currentValue + change));
+            input.value = newValue;
+
+            // Trigger change event to update summary
+            input.dispatchEvent(new Event('input'));
+        }
+
+        // Mejorar la animación de las tarjetas de producto
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+                this.style.boxShadow = 'var(--shadow-medium)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+                this.style.boxShadow = 'var(--shadow-soft)';
+            });
+        });
+
+        // Validación en tiempo real
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            const qty250 = parseInt(document.getElementById('Quantity250g').value) || 0;
+            const qty500 = parseInt(document.getElementById('Quantity500g').value) || 0;
+
+            if (qty250 === 0 && qty500 === 0) {
+                e.preventDefault();
+                alert('Por favor selecciona al menos un producto');
+                return false;
+            }
+        });
+    </script>
+}

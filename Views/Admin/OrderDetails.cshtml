@@ -1,0 +1,50 @@
+﻿@model Susurros_del_Cafe_WEB.Models.Order
+@{
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="border-radius: 20px; box-shadow: var(--shadow-medium); border: none;">
+                <div class="card-header" style="background: var(--coffee-primary); color: white; border-radius: 20px 20px 0 0; padding: 2rem;">
+                    <h3 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Pedido #@Model.Id
+                    </h3>
+                    <p class="mb-0" style="opacity: 0.9;">@Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+                <div class="card-body" style="padding: 2rem;">
+                    <!-- Detalles del cliente -->
+                    <h5 style="color: var(--coffee-dark); margin-bottom: 1rem;">Cliente</h5>
+                    <p><strong>Nombre:</strong> @Model.Customer.Name</p>
+                    <p><strong>Teléfono:</strong> @Model.Customer.Phone</p>
+                    <p><strong>Dirección:</strong> @Model.Customer.Address</p>
+                    <p><strong>Provincia:</strong> @Model.Customer.Province</p>
+
+                    <!-- Productos -->
+                    <h5 style="color: var(--coffee-dark); margin: 2rem 0 1rem;">Productos</h5>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div class="d-flex justify-content-between py-2">
+                            <span>@item.Product.Name x @item.Quantity</span>
+                            <span>₡@((item.Quantity * item.UnitPrice).ToString("N0"))</span>
+                        </div>
+                    }
+
+                    <!-- Total -->
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total:</strong>
+                        <strong style="color: var(--coffee-primary);">₡@Model.Total.ToString("N0")</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="@Url.Action("Index")" class="btn btn-coffee">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Panel
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

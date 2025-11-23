@@ -1,0 +1,307 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-75">
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title fade-in-up">Susurros del Café</h1>
+                <p class="hero-subtitle fade-in-up">Café artesanal premium de Costa Rica. Cada grano seleccionado a mano, tostado con maestría, entregado con pasión.</p>
+                <div class="hero-actions fade-in-up">
+                    <a href="@Url.Action("Create", "Order")" class="btn btn-coffee btn-lg me-3">
+                        Hacer Pedido
+                    </a>
+                    <a href="#productos" class="btn btn-coffee-outline btn-lg">
+                        Ver Productos
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center fade-in-up">
+                <!-- Reemplazar el ícono con imagen real -->
+                <div class="hero-image-container">
+                    <img src="~/images/products/cafe-hero.jpg"
+                         alt="Café Susurros del Café"
+                         class="hero-product-image"
+                         style="max-width: 100%; height: auto; border-radius: 20px; box-shadow: var(--shadow-strong);">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Historia Familiar Section -->
+<section class="py-5" style="background: linear-gradient(135deg, var(--coffee-neutral) 0%, white 100%); padding: 5rem 0;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 fade-in-up">
+                <h2 class="display-5 mb-4" style="color: var(--coffee-primary);">Una Tradición Familiar de Tres Generaciones</h2>
+                <div style="color: var(--coffee-gray); font-size: 1.1rem; line-height: 1.8;">
+                    <p class="mb-4">
+                        Nuestra historia comenzó con <strong>Adrián Cruz y Betty Matamoros</strong>, nuestros abuelos visionarios que dieron los primeros pasos en el cultivo del café en las fértiles tierras volcánicas de Costa Rica.
+                    </p>
+                    <p class="mb-4">
+                        La segunda generación llegó con <strong>Marta Cruz y Omar Arrieta</strong>, quienes continuaron el cultivo familiar y perfeccionaron las técnicas artesanales que hoy nos definen.
+                    </p>
+                    <p class="mb-4">
+                        Ahora, como <strong>Hijo y Nieto</strong>, represento la tercera generación y por primera vez en nuestra historia familiar, llevamos nuestro café directamente a tu mesa con un proceso completamente artesanal.
+                    </p>
+                    <div class="text-premium mt-4">
+                        <i class="fas fa-quote-left me-2"></i>
+                        <em>"Cada grano cuenta la historia de tres generaciones de pasión cafetera"</em>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center fade-in-up">
+                <div class="position-relative">
+                    <div style="background: linear-gradient(135deg, var(--coffee-primary), var(--coffee-secondary));
+                    border-radius: 20px; padding: 3rem; color: white; box-shadow: var(--shadow-medium);
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+                        <!-- Imagen Circular Centrada -->
+                        <div class="family-image-container mb-4">
+                            <img src="~/images/history/familia.jpg"
+                                 alt="Familia Arrieta Cruz"
+                                 class="family-circular-image"
+                                 style="width: 150px; height: 150px; border-radius: 50%;
+                            object-fit: cover; border: 4px solid white;
+                            box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                        </div>
+
+                        <!-- Contenido Centrado -->
+                        <div class="text-center">
+                            <h4 class="mb-3">Familia Arrieta Cruz</h4>
+                            <p class="mb-2"><strong>1ª Generación:</strong> Adrián Cruz & Betty Matamoros</p>
+                            <p class="mb-2"><strong>2ª Generación:</strong> Marta Cruz & Omar Arrieta</p>
+                            <p class="mb-3"><strong>3ª Generación:</strong> Marco Arrieta & Guadalupe Arrieta</p>
+                            <div class="mt-3" style="font-size: 0.9rem; opacity: 0.8;">
+                                <i class="fas fa-map-marker-alt me-2"></i>
+                                Quebradas de Tambor, Alajuela
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="productos" class="py-5" style="padding: 5rem 0;">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-4 mb-4">Nuestros Cafés Premium</h2>
+            <p class="lead" style="color: var(--coffee-gray); max-width: 600px; margin: 0 auto;">
+                Dos presentaciones perfectas para cada momento. Calidad excepcional en cada taza.
+            </p>
+        </div>
+
+        <div class="row g-5 justify-content-center">
+            <div class="col-lg-5">
+                <div class="coffee-card fade-in-up">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <!-- Imagen real del producto 250g -->
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/cafe-250g.jpg"
+                                     alt="Café Susurros 250g"
+                                     class="product-image"
+                                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h3 class="card-title mb-3">Café Susurros 250g</h3>
+                            <div class="price-tag">₡2,500</div>
+                        </div>
+
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Café 100% costarricense de altura</li>
+                            <li><i class="fas fa-check"></i> Tostado artesanal en pequeños lotes</li>
+                            <li><i class="fas fa-check"></i> Empaque sellado al vacío</li>
+                            <li><i class="fas fa-check"></i> Notas dulces</li>
+                            <li><i class="fas fa-check"></i> Aproximadamente 25 tazas</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="coffee-card fade-in-up">
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <!-- Imagen real del producto 500g -->
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/cafe-500g.jpg"
+                                     alt="Café Susurros 500g"
+                                     class="product-image"
+                                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h3 class="card-title mb-3">Café Susurros 500g</h3>
+                            <div class="price-tag">₡4,500</div>
+                        </div>
+
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Presentación familiar premium</li>
+                            <li><i class="fas fa-check"></i> Mejor valor por gramo</li>
+                            <li><i class="fas fa-check"></i> Empaque resellable</li>
+                            <li><i class="fas fa-check"></i> Perfil de sabor complejo</li>
+                            <li><i class="fas fa-check"></i> Aproximadamente 50 tazas</li>
+                        </ul>
+
+                        <div class="text-center">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Por Qué Elegir Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 mb-4">¿Por Qué Elegir Susurros del Café?</h2>
+            <p class="lead" style="color: var(--coffee-gray); max-width: 700px; margin: 0 auto;">
+                Tres generaciones de experiencia se unen con la innovación para ofrecerte el mejor café artesanal de Costa Rica
+            </p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-mountain feature-icon"></i>
+                    <h4>Origen Volcánico</h4>
+                    <p>Cultivado cerca del volcán, nuestro café se beneficia de suelos ricos en minerales que le otorgan un sabor único e incomparable.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-hand-holding-heart feature-icon"></i>
+                    <h4>Proceso 100% Artesanal</h4>
+                    <p>Cada grano es seleccionado a mano y procesado de manera natural, preservando todos los sabores y aromas originales.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h4>Tradición Familiar</h4>
+                    <p>Tres generaciones de la familia Arrieta Cruz han perfeccionado el arte del café. Ahora, por primera vez, llega directamente a tu mesa.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-leaf feature-icon"></i>
+                    <h4>Proceso Natural</h4>
+                    <p>Sin químicos artificiales, respetando los procesos naturales para un café puro que refleja la riqueza de nuestra tierra.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-award feature-icon"></i>
+                    <h4>Sabor Excepcional</h4>
+                    <p>El resultado de décadas de experiencia: un café con cuerpo, aroma intenso y notas distintivas que despiertan todos tus sentidos.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="feature-card fade-in-up">
+                    <i class="fas fa-shipping-fast feature-icon"></i>
+                    <h4>Directo del Productor</h4>
+                    <p>Sin intermediarios. Del cafetal a tu taza, garantizando la máxima frescura y el mejor precio para un café de esta calidad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonial Section - Versión Cafetera -->
+<section class="testimonial-section">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="testimonial-card">
+                    <i class="fas fa-quote-left" style="font-size: 2.5rem; color: var(--coffee-secondary); opacity: 0.7; margin-bottom: 2rem;"></i>
+                    <p class="testimonial-quote">
+                        "Café artesanal cultivado con dedicación y pasión. Cada grano refleja la tradición de la familia Arrieta Cruz y la riqueza natural de la tierra, para ofrecerte un sabor único y un aroma incomparable."
+                    </p>
+                    <hr style="width: 60px; margin: 2rem auto; border-color: var(--coffee-secondary);">
+                    <div class="testimonial-author">Marco Arrieta</div>
+                    <div class="testimonial-role">Tercera Generación - Familia Arrieta Cruz</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 mb-4">Sé Parte de Nuestra Historia</h2>
+                <p class="mb-5">
+                    Por primera vez en tres generaciones, puedes disfrutar directamente del café de la familia Arrieta Cruz. Una oportunidad única de probar la tradición cafetera costarricense en su máxima expresión.
+                </p>
+                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee btn-lg">
+                    <i class="fas fa-coffee me-2"></i>Hacer Mi Pedido Ahora
+                </a>
+                <div class="mt-4" style="font-size: 0.9rem; color: var(--coffee-gray);">
+                    <i class="fas fa-truck me-2"></i>Envío gratis a Alajuela • <i class="fas fa-shield-alt me-2 ms-3"></i>Garantía de satisfacción
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        // Smooth scroll animation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+            el.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+            observer.observe(el);
+        });
+    </script>
+}
