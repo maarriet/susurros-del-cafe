@@ -3,6 +3,8 @@ using Susurros_del_Cafe_WEB.Data;
 using Susurros_del_Cafe_WEB.Services;
 using Susurros_del_Cafe_WEB.Models;
 
+// 🕐 CONFIGURAR TIMEZONE PARA POSTGRESQL
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
 
 // 🆕 CONFIGURACIÓN DE PUERTO PARA RAILWAY
