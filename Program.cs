@@ -24,22 +24,25 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// 🆕 CONFIGURACIÓN DE BASE DE DATOS PARA RAILWAY
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL") 
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// 🆕 CONFIGURACIÓN DE BASE DE DATOS PARA RAILWAY - MEJORADA
+var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-// Usar PostgreSQL en producción, SQLite en desarrollo
-if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
+if (!string.IsNullOrEmpty(connectionString))
 {
-    // Producción - PostgreSQL
+    // Railway PostgreSQL
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
+    
+    Console.WriteLine("✅ Using Railway PostgreSQL");
 }
 else
 {
-    // Desarrollo - SQLite
+    // Desarrollo local - SQLite
+    var localConnection = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlite(connectionString ?? "Data Source=susurros_cafe.db"));
+        options.UseSqlite(localConnection ?? "Data Source=susurros_cafe.db"));
+    
+    Console.WriteLine("✅ Using local SQLite");
 }
 
 // Configurar sesiones
