@@ -30,22 +30,7 @@ else
         options.UseSqlite(connectionString ?? "Data Source=susurros_cafe.db"));
 }
 
-// Configurar sesiones
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromHours(2);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
-// Registrar servicios
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-
-// Configurar EmailSettings (si las usas)
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-
-var app = builder.Build();
+// ... resto igual hasta...
 
 // 🆕 CREAR BASE DE DATOS EN RAILWAY
 if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
