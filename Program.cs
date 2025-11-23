@@ -6,7 +6,11 @@ using Susurros_del_Cafe_WEB.Models;
 // 🕐 CONFIGURAR TIMEZONE PARA POSTGRESQL
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
+// Configurar EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
+// Registrar EmailService (NO MockEmailService)
+builder.Services.AddScoped<IEmailService, EmailService>();
 // 🆕 CONFIGURACIÓN DE PUERTO PARA RAILWAY
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
