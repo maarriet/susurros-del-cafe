@@ -24,16 +24,18 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// 🆕 CONFIGURACIÓN DE BASE DE DATOS PARA RAILWAY - MEJORADA
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+// 🆕 CONFIGURACIÓN DE BASE DE DATOS CON CONVERSIÓN DE URL
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
-if (!string.IsNullOrEmpty(connectionString))
+if (!string.IsNullOrEmpty(databaseUrl))
 {
-    // Railway PostgreSQL
+    // Convertir URL de Railway a connection string de .NET
+    var connectionString = ConvertDatabaseUrl(databaseUrl);
+    
     builder.Services.AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
     
-    Console.WriteLine("✅ Using Railway PostgreSQL");
+    Console.WriteLine("✅ Using Railway PostgreSQL with converted connection string");
 }
 else
 {
@@ -56,8 +58,6 @@ builder.Services.AddSession(options =>
 // Registrar servicios
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
-// Configurar EmailSettings
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 var app = builder.Build();
@@ -86,7 +86,6 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
 }
 
-// Solo HTTPS en desarrollo
 if (app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
@@ -103,3 +102,24 @@ app.MapControllerRoute(
 
 Console.WriteLine("🚀 Susurros del Café starting...");
 app.Run();
+
+// 🔧 FUNCIÓN PARA CONVERTIR URL DE RAILWAY
+static string ConvertDatabaseUrl(string databaseUrl)
+{
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var host = uri.Host;
+        var port = uri.Port;
+        var database = uri.LocalPath.TrimStart('/');
+        var username = uri.UserInfo.Split(':')[0];
+        var password = uri.UserInfo.Split(':')[1];
+
+        return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Prefer;Trust Server Certificate=true";
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error converting database URL: {ex.Message}");
+        return databaseUrl; // Fallback al original
+    }
+}
