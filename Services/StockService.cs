@@ -37,7 +37,7 @@ namespace Susurros_del_Cafe_WEB.Services
                 if (product == null) return false;
 
                 product.IsActive = IsActive;
-                product.LastStockUpdate = DateTime.Now;
+             
 
                 await _context.SaveChangesAsync();
                 Console.WriteLine($"✅ Producto {product.Name} actualizado: {(IsActive ? "Disponible" : "Agotado")}");
@@ -58,7 +58,7 @@ namespace Susurros_del_Cafe_WEB.Services
                 if (product == null) return false;
 
                 product.Stock = quantity;
-                product.LastStockUpdate = DateTime.Now;
+              
 
                 // Si el stock es 0, marcar como no disponible
                 if (quantity == 0)

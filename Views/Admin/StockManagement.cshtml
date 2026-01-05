@@ -133,17 +133,7 @@
                                         </div>
                                     </td>
                                     <td style="padding: 1rem; border: none;">
-                                        @if (product.LastStockUpdate.HasValue)
-                                        {
-                                            <div>
-                                                <div style="color: var(--coffee-dark);">@product.LastStockUpdate.Value.ToString("dd/MM/yyyy")</div>
-                                                <small style="color: var(--text-light);">@product.LastStockUpdate.Value.ToString("HH:mm")</small>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <small style="color: var(--text-light);">Sin actualizar</small>
-                                        }
+
                                     </td>
                                     <td style="padding: 1rem; border: none;">
                                         <div class="btn-group btn-group-sm">
