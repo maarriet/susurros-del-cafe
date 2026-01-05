@@ -52,6 +52,77 @@ namespace Susurros_del_Cafe_WEB.Controllers
                 Console.WriteLine($"Total: ₡{model.Total:N0}");
                 Console.WriteLine($"Comentarios: '{model.Comments}'");
 
+                // 🆕 VALIDACIÓN DE STOCK ANTES DE PROCESAR
+                var products = _context.Products.Where(p => p.IsActive).ToList();
+
+                // Validar stock para cada producto seleccionado
+                var stockErrors = new List<string>();
+
+                if (model.QuantityMedioMolido250g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Medio Molido 250g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Medio Molido 250g está agotado");
+                    else if (model.QuantityMedioMolido250g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Medio Molido 250g");
+                }
+
+                if (model.QuantityMedioMolido500g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Medio Molido 500g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Medio Molido 500g está agotado");
+                    else if (model.QuantityMedioMolido500g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Medio Molido 500g");
+                }
+
+                if (model.QuantityOscuroMolido250g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 250g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Oscuro Molido 250g está agotado");
+                    else if (model.QuantityOscuroMolido250g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Oscuro Molido 250g");
+                }
+
+                if (model.QuantityOscuroMolido500g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 500g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Oscuro Molido 500g está agotado");
+                    else if (model.QuantityOscuroMolido500g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Oscuro Molido 500g");
+                }
+
+                if (model.QuantityMedioGrano250g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 250g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Medio en Grano 250g está agotado");
+                    else if (model.QuantityMedioGrano250g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Medio en Grano 250g");
+                }
+
+                if (model.QuantityMedioGrano500g > 0)
+                {
+                    var product = products.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 500g");
+                    if (product == null || product.Stock == 0)
+                        stockErrors.Add("Tueste Medio en Grano 500g está agotado");
+                    else if (model.QuantityMedioGrano500g > product.Stock)
+                        stockErrors.Add($"Solo quedan {product.Stock} unidades de Tueste Medio en Grano 500g");
+                }
+
+                // Si hay errores de stock, mostrarlos
+                if (stockErrors.Any())
+                {
+                    foreach (var error in stockErrors)
+                    {
+                        ModelState.AddModelError("", error);
+                    }
+                    ViewBag.Products = products;
+                    return View(model);
+                }
+
                 // Verificar ModelState
                 if (!ModelState.IsValid)
                 {
@@ -63,6 +134,7 @@ namespace Susurros_del_Cafe_WEB.Controllers
                             Console.WriteLine($"   - Campo '{error.Key}': {errorMsg.ErrorMessage}");
                         }
                     }
+                    ViewBag.Products = products;
                     return View(model);
                 }
                 else
@@ -102,6 +174,7 @@ namespace Susurros_del_Cafe_WEB.Controllers
                 }
 
                 ModelState.AddModelError("", $"Error específico: {ex.Message}");
+                ViewBag.Products = _context.Products.Where(p => p.IsActive).ToList();
                 return View(model);
             }
         }
