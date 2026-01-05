@@ -47,7 +47,7 @@
             <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
                 <div class="card-body" style="padding: 2rem;">
                     <i class="fas fa-check-circle" style="font-size: 2.5rem; color: #28a745; margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => p.IsAvailable)</h3>
+                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => p.IsActive)</h3>
                     <p class="mb-0" style="color: var(--text-light);">Productos Disponibles</p>
                 </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
                 <div class="card-body" style="padding: 2rem;">
                     <i class="fas fa-times-circle" style="font-size: 2.5rem; color: #dc3545; margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => !p.IsAvailable)</h3>
+                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => !p.IsActive)</h3>
                     <p class="mb-0" style="color: var(--text-light);">Productos Agotados</p>
                 </div>
             </div>
@@ -65,7 +65,7 @@
             <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
                 <div class="card-body" style="padding: 2rem;">
                     <i class="fas fa-boxes" style="font-size: 2.5rem; color: var(--coffee-secondary); margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--coffee-primary);">@Model.Sum(p => p.StockQuantity)</h3>
+                    <h3 style="color: var(--coffee-primary);">@Model.Sum(p => p.Stock)</h3>
                     <p class="mb-0" style="color: var(--text-light);">Total en Stock</p>
                 </div>
             </div>
@@ -110,7 +110,7 @@
                                     <td style="padding: 1rem; border: none;">
                                         <div class="d-flex align-items-center">
                                             <input type="number" class="form-control form-control-sm me-2"
-                                                   value="@product.StockQuantity"
+                                                   value="@product.Stock"
                                                    id="stock-@product.Id"
                                                    style="width: 80px;" min="0" max="999">
                                             <button class="btn btn-sm btn-coffee-outline"
@@ -123,11 +123,11 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input" type="checkbox"
                                                    id="available-@product.Id"
-                                            @(product.IsAvailable ? "checked" : "")
+                                            @(product.IsActive ? "checked" : "")
                                                    onchange="updateAvailability(@product.Id, this.checked)">
                                             <label class="form-check-label" for="available-@product.Id">
-                                                <span class="badge @(product.IsAvailable ? "bg-success" : "bg-danger")">
-                                                    @(product.IsAvailable ? "Disponible" : "Agotado")
+                                                <span class="badge @(product.IsActive ? "bg-success" : "bg-danger")">
+                                                    @(product.IsActive ? "Disponible" : "Agotado")
                                                 </span>
                                             </label>
                                         </div>
@@ -147,7 +147,7 @@
                                     </td>
                                     <td style="padding: 1rem; border: none;">
                                         <div class="btn-group btn-group-sm">
-                                            @if (product.IsAvailable)
+                                            @if (product.IsActive)
                                             {
                                                 <button class="btn btn-warning"
                                                         onclick="setOutOfStock(@product.Id)"
@@ -184,7 +184,7 @@
 
 @section Scripts {
     <script>
-        function updateAvailability(productId, isAvailable) {
+        function updateAvailability(productId, IsActive) {
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '@Url.Action("UpdateProductAvailability")';
@@ -196,8 +196,8 @@
 
             const availableInput = document.createElement('input');
             availableInput.type = 'hidden';
-            availableInput.name = 'isAvailable';
-            availableInput.value = isAvailable;
+            availableInput.name = 'IsActive';
+            availableInput.value = IsActive;
 
             form.appendChild(productIdInput);
             form.appendChild(availableInput);

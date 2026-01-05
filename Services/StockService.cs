@@ -8,7 +8,7 @@ namespace Susurros_del_Cafe_WEB.Services
     public interface IStockService
     {
         Task<List<Product>> GetAllProductsAsync();
-        Task<bool> UpdateProductAvailabilityAsync(int productId, bool isAvailable);
+        Task<bool> UpdateProductAvailabilityAsync(int productId, bool IsActive);
         Task<bool> UpdateProductStockAsync(int productId, int quantity);
         Task InitializeProductsAsync();
     }
@@ -29,18 +29,18 @@ namespace Susurros_del_Cafe_WEB.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> UpdateProductAvailabilityAsync(int productId, bool isAvailable)
+        public async Task<bool> UpdateProductAvailabilityAsync(int productId, bool IsActive)
         {
             try
             {
                 var product = await _context.Products.FindAsync(productId);
                 if (product == null) return false;
 
-                product.IsAvailable = isAvailable;
+                product.IsActive = IsActive;
                 product.LastStockUpdate = DateTime.Now;
 
                 await _context.SaveChangesAsync();
-                Console.WriteLine($"✅ Producto {product.Name} actualizado: {(isAvailable ? "Disponible" : "Agotado")}");
+                Console.WriteLine($"✅ Producto {product.Name} actualizado: {(IsActive ? "Disponible" : "Agotado")}");
                 return true;
             }
             catch (Exception ex)
@@ -57,13 +57,13 @@ namespace Susurros_del_Cafe_WEB.Services
                 var product = await _context.Products.FindAsync(productId);
                 if (product == null) return false;
 
-                product.StockQuantity = quantity;
+                product.Stock = quantity;
                 product.LastStockUpdate = DateTime.Now;
 
                 // Si el stock es 0, marcar como no disponible
                 if (quantity == 0)
                 {
-                    product.IsAvailable = false;
+                    product.IsActive = false;
                 }
 
                 await _context.SaveChangesAsync();
@@ -103,8 +103,8 @@ namespace Susurros_del_Cafe_WEB.Services
                             Name = productName,
                             Description = $"Café artesanal - {productName}",
                             Price = price,
-                            IsAvailable = true,
-                            StockQuantity = 50
+                            IsActive = true,
+                            Stock = 50
                         };
 
                         _context.Products.Add(product);

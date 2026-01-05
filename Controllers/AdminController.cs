@@ -178,11 +178,11 @@ namespace Susurros_del_Cafe_WEB.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProductAvailability(int productId, bool isAvailable)
+        public async Task<IActionResult> UpdateProductAvailability(int productId, bool IsActive)
         {
             try
             {
-                var success = await _stockService.UpdateProductAvailabilityAsync(productId, isAvailable);
+                var success = await _stockService.UpdateProductAvailabilityAsync(productId, IsActive);
 
                 if (success)
                 {
