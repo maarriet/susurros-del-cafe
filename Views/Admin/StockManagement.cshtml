@@ -1,0 +1,244 @@
+﻿@model List<Susurros_del_Cafe_WEB.Models.Product>
+@{
+    ViewData["Title"] = "Gestión de Stock";
+}
+
+<!-- Hero Section -->
+<section style="background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-rich) 100%); padding: 3rem 0; color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 mb-2" style="font-weight: 700;">
+                    <i class="fas fa-boxes me-3"></i>Gestión de Stock
+                </h1>
+                <p class="lead mb-0" style="opacity: 0.9;">Controla la disponibilidad de tus productos</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a href="@Url.Action("Index")" class="btn btn-light">
+                    <i class="fas fa-arrow-left me-2"></i>Volver al Panel
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container" style="margin-top: -2rem; margin-bottom: 4rem;">
+
+    <!-- Mensajes -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" style="border-radius: 15px;">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" style="border-radius: 15px;">
+            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Resumen de Stock -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
+                <div class="card-body" style="padding: 2rem;">
+                    <i class="fas fa-check-circle" style="font-size: 2.5rem; color: #28a745; margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => p.IsAvailable)</h3>
+                    <p class="mb-0" style="color: var(--text-light);">Productos Disponibles</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
+                <div class="card-body" style="padding: 2rem;">
+                    <i class="fas fa-times-circle" style="font-size: 2.5rem; color: #dc3545; margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--coffee-primary);">@Model.Count(p => !p.IsAvailable)</h3>
+                    <p class="mb-0" style="color: var(--text-light);">Productos Agotados</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-center" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
+                <div class="card-body" style="padding: 2rem;">
+                    <i class="fas fa-boxes" style="font-size: 2.5rem; color: var(--coffee-secondary); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--coffee-primary);">@Model.Sum(p => p.StockQuantity)</h3>
+                    <p class="mb-0" style="color: var(--text-light);">Total en Stock</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Productos -->
+    <div class="card" style="border-radius: 15px; border: none; box-shadow: var(--shadow-soft);">
+        <div class="card-header" style="background: var(--coffee-light); border-radius: 15px 15px 0 0; padding: 1.5rem;">
+            <h5 class="mb-0" style="color: var(--coffee-dark);">
+                <i class="fas fa-list me-2"></i>Control de Productos
+            </h5>
+        </div>
+        <div class="card-body" style="padding: 0;">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background: var(--coffee-cream);">
+                            <tr>
+                                <th style="padding: 1rem; border: none;">Producto</th>
+                                <th style="padding: 1rem; border: none;">Precio</th>
+                                <th style="padding: 1rem; border: none;">Stock</th>
+                                <th style="padding: 1rem; border: none;">Estado</th>
+                                <th style="padding: 1rem; border: none;">Última Actualización</th>
+                                <th style="padding: 1rem; border: none;">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var product in Model)
+                            {
+                                <tr style="border-bottom: 1px solid var(--coffee-cream);">
+                                    <td style="padding: 1rem; border: none;">
+                                        <div>
+                                            <strong style="color: var(--coffee-dark);">@product.Name</strong><br>
+                                            <small style="color: var(--text-light);">ID: #@product.Id</small>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem; border: none;">
+                                        <strong style="color: var(--coffee-primary);">₡@product.Price.ToString("N0")</strong>
+                                    </td>
+                                    <td style="padding: 1rem; border: none;">
+                                        <div class="d-flex align-items-center">
+                                            <input type="number" class="form-control form-control-sm me-2"
+                                                   value="@product.StockQuantity"
+                                                   id="stock-@product.Id"
+                                                   style="width: 80px;" min="0" max="999">
+                                            <button class="btn btn-sm btn-coffee-outline"
+                                                    onclick="updateStock(@product.Id)">
+                                                <i class="fas fa-save"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem; border: none;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="available-@product.Id"
+                                            @(product.IsAvailable ? "checked" : "")
+                                                   onchange="updateAvailability(@product.Id, this.checked)">
+                                            <label class="form-check-label" for="available-@product.Id">
+                                                <span class="badge @(product.IsAvailable ? "bg-success" : "bg-danger")">
+                                                    @(product.IsAvailable ? "Disponible" : "Agotado")
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td style="padding: 1rem; border: none;">
+                                        @if (product.LastStockUpdate.HasValue)
+                                        {
+                                            <div>
+                                                <div style="color: var(--coffee-dark);">@product.LastStockUpdate.Value.ToString("dd/MM/yyyy")</div>
+                                                <small style="color: var(--text-light);">@product.LastStockUpdate.Value.ToString("HH:mm")</small>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <small style="color: var(--text-light);">Sin actualizar</small>
+                                        }
+                                    </td>
+                                    <td style="padding: 1rem; border: none;">
+                                        <div class="btn-group btn-group-sm">
+                                            @if (product.IsAvailable)
+                                            {
+                                                <button class="btn btn-warning"
+                                                        onclick="setOutOfStock(@product.Id)"
+                                                        title="Marcar como Agotado">
+                                                    <i class="fas fa-times"></i> Agotar
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-success"
+                                                        onclick="setInStock(@product.Id)"
+                                                        title="Marcar como Disponible">
+                                                    <i class="fas fa-check"></i> Disponible
+                                                </button>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-box-open" style="font-size: 4rem; color: var(--coffee-light); margin-bottom: 1rem;"></i>
+                    <h5 style="color: var(--text-light);">No hay productos configurados</h5>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function updateAvailability(productId, isAvailable) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("UpdateProductAvailability")';
+
+            const productIdInput = document.createElement('input');
+            productIdInput.type = 'hidden';
+            productIdInput.name = 'productId';
+            productIdInput.value = productId;
+
+            const availableInput = document.createElement('input');
+            availableInput.type = 'hidden';
+            availableInput.name = 'isAvailable';
+            availableInput.value = isAvailable;
+
+            form.appendChild(productIdInput);
+            form.appendChild(availableInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function updateStock(productId) {
+            const stockInput = document.getElementById(`stock-${productId}`);
+            const quantity = parseInt(stockInput.value) || 0;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("UpdateProductStock")';
+
+            const productIdInput = document.createElement('input');
+            productIdInput.type = 'hidden';
+            productIdInput.name = 'productId';
+            productIdInput.value = productId;
+
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'hidden';
+            quantityInput.name = 'quantity';
+            quantityInput.value = quantity;
+
+            form.appendChild(productIdInput);
+            form.appendChild(quantityInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        function setOutOfStock(productId) {
+            if (confirm('¿Marcar este producto como AGOTADO?')) {
+                updateAvailability(productId, false);
+            }
+        }
+
+        function setInStock(productId) {
+            if (confirm('¿Marcar este producto como DISPONIBLE?')) {
+                updateAvailability(productId, true);
+            }
+        }
+    </script>
+}

@@ -11,9 +11,12 @@ namespace Susurros_del_Cafe_WEB.Controllers
         private readonly IOrderService _orderService;
         private const string ADMIN_PASSWORD = "SusurrosCafe2024"; // 🔐 Cambia esta contraseña
 
-        public AdminController(IOrderService orderService)
+        private readonly IStockService _stockService; // 🆕
+
+        public AdminController(IOrderService orderService, IStockService stockService)
         {
             _orderService = orderService;
+            _stockService = stockService; // 🆕
         }
 
         // 🔐 PÁGINA DE LOGIN
@@ -157,6 +160,69 @@ namespace Susurros_del_Cafe_WEB.Controllers
         private bool IsAuthenticated()
         {
             return HttpContext.Session.GetString("IsAdmin") == "true";
+        }
+        // 🆕 GESTIÓN DE STOCK
+        public async Task<IActionResult> StockManagement()
+        {
+            try
+            {
+                await _stockService.InitializeProductsAsync();
+                var products = await _stockService.GetAllProductsAsync();
+                return View(products);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = $"Error cargando productos: {ex.Message}";
+                return View(new List<Product>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductAvailability(int productId, bool isAvailable)
+        {
+            try
+            {
+                var success = await _stockService.UpdateProductAvailabilityAsync(productId, isAvailable);
+
+                if (success)
+                {
+                    TempData["SuccessMessage"] = "Disponibilidad actualizada correctamente";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error actualizando la disponibilidad";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("StockManagement");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductStock(int productId, int quantity)
+        {
+            try
+            {
+                var success = await _stockService.UpdateProductStockAsync(productId, quantity);
+
+                if (success)
+                {
+                    TempData["SuccessMessage"] = "Stock actualizado correctamente";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Error actualizando el stock";
+                }
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error: {ex.Message}";
+            }
+
+            return RedirectToAction("StockManagement");
         }
     }
 }

@@ -11,6 +11,7 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 
 // Registrar EmailService (NO MockEmailService)
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IStockService, StockService>();
 // 🆕 CONFIGURACIÓN DE PUERTO PARA RAILWAY
 builder.WebHost.ConfigureKestrel(serverOptions =>
 {
