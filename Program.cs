@@ -1,27 +1,59 @@
-﻿// Program.cs
-using Susurros_del_Cafe_WEB.Data;
-using Susurros_del_Cafe_WEB.Models;
-using Susurros_del_Cafe_WEB.Services;
 using Microsoft.EntityFrameworkCore;
+using Susurros_del_Cafe_WEB.Data;
+using Susurros_del_Cafe_WEB.Services;
+using Susurros_del_Cafe_WEB.Models;
 
+// 🕐 CONFIGURAR TIMEZONE PARA POSTGRESQL
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL")
-    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+// Configurar EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
-// Add services to the container
+// Registrar EmailService (NO MockEmailService)
+builder.Services.AddScoped<IEmailService, EmailService>();
+// 🆕 CONFIGURACIÓN DE PUERTO PARA RAILWAY
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    var port = Environment.GetEnvironmentVariable("PORT");
+    if (!string.IsNullOrEmpty(port) && int.TryParse(port, out int railwayPort))
+    {
+        serverOptions.ListenAnyIP(railwayPort);
+        Console.WriteLine($"🚀 Railway port configured: {railwayPort}");
+    }
+    else
+    {
+        serverOptions.ListenAnyIP(5000);
+        Console.WriteLine("🏠 Development port: 5000");
+    }
+});
+
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(connectionString));
+// 🆕 CONFIGURACIÓN DE BASE DE DATOS CON CONVERSIÓN DE URL
+var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 
+if (!string.IsNullOrEmpty(databaseUrl))
+{
+    // Convertir URL de Railway a connection string de .NET
+    var connectionString = ConvertDatabaseUrl(databaseUrl);
+    
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseNpgsql(connectionString));
+    
+    Console.WriteLine("✅ Using Railway PostgreSQL with converted connection string");
+}
+else
+{
+    // Desarrollo local - SQLite
+    var localConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlite(localConnection ?? "Data Source=susurros_cafe.db"));
+    
+    Console.WriteLine("✅ Using local SQLite");
+}
 
-// Your custom services
-builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
-
-
+// Configurar sesiones
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromHours(2);
@@ -29,85 +61,44 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// Registrar servicios
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
 var app = builder.Build();
 
-
-// ✅ ESTA SECCIÓN ES CRÍTICA PARA CREAR LA DB
-using (var scope = app.Services.CreateScope())
+// 🆕 CREAR BASE DE DATOS EN RAILWAY
+if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DATABASE_URL")))
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    try
+    using (var scope = app.Services.CreateScope())
     {
-        Console.WriteLine("🗄️ Intentando crear base de datos...");
-
-        // Crear la base de datos y todas las tablas
-        bool created = context.Database.EnsureCreated();
-
-        if (created)
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        try
         {
-            Console.WriteLine("✅ Base de datos creada exitosamente");
+            context.Database.EnsureCreated();
+            Console.WriteLine("✅ Database created successfully");
         }
-        else
+        catch (Exception ex)
         {
-            Console.WriteLine("✅ Base de datos ya existe");
+            Console.WriteLine($"❌ Database creation failed: {ex.Message}");
         }
-
-        // Verificar si hay productos, si no, crear algunos
-        if (!context.Products.Any())
-        {
-            var products = new List<Product>
-            {
-                new Product
-                {
-                    Name = "Café Susurros 250g",
-                    Price = 2500,
-                    Description = "Café artesanal 250g - Perfecto para disfrutar en casa"
-                },
-                new Product
-                {
-                    Name = "Café Susurros 500g",
-                    Price = 4500,
-                    Description = "Café artesanal 500g - Ideal para familias cafeteras"
-                }
-            };
-
-            context.Products.AddRange(products);
-            context.SaveChanges();
-            Console.WriteLine($"✅ Se crearon {products.Count} productos iniciales");
-        }
-        else
-        {
-            Console.WriteLine($"✅ Ya existen {context.Products.Count()} productos");
-        }
-
-        // Verificar que el archivo se creó
-        var dbPath = Path.Combine(Directory.GetCurrentDirectory(), "susurros_cafe.db");
-        if (File.Exists(dbPath))
-        {
-            Console.WriteLine($"✅ Archivo de base de datos confirmado en: {dbPath}");
-        }
-        else
-        {
-            Console.WriteLine($"❌ Archivo de base de datos NO encontrado en: {dbPath}");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"❌ Error inicializando DB: {ex.Message}");
-        Console.WriteLine($"Detalles: {ex.InnerException?.Message}");
-        Console.WriteLine($"StackTrace: {ex.StackTrace}");
     }
 }
 
-// Configure the HTTP request pipeline
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
 }
-app.UseSession();
-app.UseHttpsRedirection();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseStaticFiles();
+app.UseSession();
 app.UseRouting();
 app.UseAuthorization();
 
@@ -115,5 +106,26 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-Console.WriteLine("🚀 Susurros del Café iniciando...");
+Console.WriteLine("🚀 Susurros del Café starting...");
 app.Run();
+
+// 🔧 FUNCIÓN PARA CONVERTIR URL DE RAILWAY
+static string ConvertDatabaseUrl(string databaseUrl)
+{
+    try
+    {
+        var uri = new Uri(databaseUrl);
+        var host = uri.Host;
+        var port = uri.Port;
+        var database = uri.LocalPath.TrimStart('/');
+        var username = uri.UserInfo.Split(':')[0];
+        var password = uri.UserInfo.Split(':')[1];
+
+        return $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Prefer;Trust Server Certificate=true";
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error converting database URL: {ex.Message}");
+        return databaseUrl; // Fallback al original
+    }
+}

@@ -1,19 +1,19 @@
 /* wwwroot/css/site.css - Paleta Cafetera Original Mejorada */
 :root {
-    /* Colores c·lidos de cafÈ - versiÛn mejorada */
-    --coffee-primary: #8B4513; /* MarrÛn cafÈ cl·sico */
-    --coffee-secondary: #D2691E; /* Naranja c·lido */
-    --coffee-light: #F4E4BC; /* Crema cafÈ claro */
+    /* Colores c√°lidos de caf√© - versi√≥n mejorada */
+    --coffee-primary: #8B4513; /* Marr√≥n caf√© cl√°sico */
+    --coffee-secondary: #D2691E; /* Naranja c√°lido */
+    --coffee-light: #F4E4BC; /* Crema caf√© claro */
     --coffee-cream: #FFF8DC; /* Crema suave */
-    --coffee-dark: #654321; /* MarrÛn oscuro */
-    --coffee-accent: #CD853F; /* MarrÛn dorado */
-    --coffee-warm: #DEB887; /* Beige c·lido */
+    --coffee-dark: #654321; /* Marr√≥n oscuro */
+    --coffee-accent: #CD853F; /* Marr√≥n dorado */
+    --coffee-warm: #DEB887; /* Beige c√°lido */
     --coffee-rich: #A0522D; /* Sienna */
     /* Colores de texto mejorados */
     --text-dark: #2c3e50;
     --text-light: #6c757d;
     --text-white: #ffffff;
-    /* Sombras c·lidas */
+    /* Sombras c√°lidas */
     --shadow-soft: 0 2px 15px rgba(139, 69, 19, 0.15);
     --shadow-medium: 0 4px 25px rgba(139, 69, 19, 0.2);
     --shadow-strong: 0 8px 35px rgba(139, 69, 19, 0.25);
@@ -481,7 +481,7 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Estilos para im·genes de productos */
+/* Estilos para im√°genes de productos */
 .hero-image-container {
     position: relative;
     display: inline-block;
@@ -539,7 +539,7 @@ h1, h2, h3, h4, h5, h6 {
     align-items: center;
 }
 
-/* Responsive para mÛviles */
+/* Responsive para m√≥viles */
 @media (max-width: 768px) {
     .family-circular-image {
         width: 120px !important;
@@ -548,7 +548,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-/* Efecto de overlay para las im·genes */
+/* Efecto de overlay para las im√°genes */
 .product-image-container::before {
     content: '';
     position: absolute;
@@ -567,7 +567,7 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
 }
 
-/* Responsive para im·genes */
+/* Responsive para im√°genes */
 @media (max-width: 768px) {
     .product-image {
         width: 150px !important;
@@ -595,6 +595,7 @@ h1, h2, h3, h4, h5, h6 {
     box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
     animation: glow 3s ease-in-out infinite alternate;
 }
+<<<<<<< HEAD
 
 .cosecha-badge {
     font-size: 1.2rem;
@@ -691,8 +692,105 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
 }
+=======
+>>>>>>> 1da017b7f6894dfcc61fb7e160698a449ff3e856
 
-/* Loading placeholder para im·genes */
+.cosecha-badge {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.cosecha-text {
+    color: #fff;
+    font-size: 0.9rem;
+    opacity: 0.95;
+}
+
+/* Caracter√≠sticas destacadas - MEJORADO */
+.hero-features {
+    margin: 25px 0;
+}
+
+.feature-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.95); /* Fondo blanco semi-transparente */
+    color: #8B4513; /* Caf√© oscuro */
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: 700; /* M√°s bold */
+    border: 2px solid #8B4513; /* Borde caf√© s√≥lido */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+    transition: all 0.3s ease;
+    text-shadow: none; /* Sin sombra de texto */
+}
+
+    .feature-badge:hover {
+        background: #8B4513; /* Fondo caf√© al hover */
+        color: white; /* Texto blanco al hover */
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+    }
+
+.stock-limitado {
+    background: rgba(255, 255, 255, 0.95) !important; /* Fondo blanco */
+    color: #dc3545 !important; /* Rojo oscuro */
+    border-color: #dc3545 !important; /* Borde rojo */
+    font-weight: 800 !important; /* Extra bold */
+    animation: pulse-red 2s infinite;
+}
+
+    .stock-limitado:hover {
+        background: #dc3545 !important; /* Fondo rojo al hover */
+        color: white !important; /* Texto blanco al hover */
+    }
+/* Animaciones */
+@keyframes glow {
+    from {
+        box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+    }
+
+    to {
+        box-shadow: 0 6px 25px rgba(139, 69, 19, 0.5);
+    }
+}
+
+@keyframes pulse-red {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4);
+    }
+
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+    }
+}
+
+/* Mejorar botones */
+.btn-coffee {
+    transition: all 0.3s ease;
+}
+
+    .btn-coffee:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+    }
+
+.btn-coffee-outline:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(139, 69, 19, 0.2);
+}
+/* Loading placeholder para im√°genes */
 .product-image-loading {
     background: linear-gradient(90deg, var(--coffee-light) 25%, var(--coffee-cream) 50%, var(--coffee-light) 75%);
     background-size: 200% 100%;
