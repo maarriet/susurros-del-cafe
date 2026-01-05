@@ -7,7 +7,7 @@
 <section style="background: linear-gradient(135deg, var(--coffee-primary) 0%, var(--coffee-rich) 100%); padding: 3rem 0; color: white;">
     <div class="container text-center">
         <h1 class="display-4 mb-3" style="font-weight: 700;">Realizar Pedido</h1>
-        <p class="lead" style="opacity: 0.9;">Selecciona tus productos y completa tu información para recibir el mejor café artesanal</p>
+        <p class="lead" style="opacity: 0.9;">Selecciona entre nuestras 6 variedades de café artesanal y completa tu información</p>
     </div>
 </section>
 
@@ -20,69 +20,215 @@
                     <form asp-action="Create" method="post" id="orderForm">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="border-radius: 15px;"></div>
 
-                        <!-- Sección de Productos en el formulario -->
-                        <div class="row g-4">
-                            <!-- Producto 250g -->
-                            <div class="col-md-6">
-                                <div class="product-card h-100" style="padding: 2rem; border-radius: 16px; transition: var(--transition);">
-                                    <div class="text-center">
-                                        <!-- Imagen real del producto -->
-                                        <div class="product-image-container mb-3">
-                                            <img src="~/images/products/cafe-250g.jpg"
-                                                 alt="Café Susurros 250g"
-                                                 class="order-product-image"
-                                                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
-                                        </div>
-                                        <h5 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Café Susurros 250g</h5>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">Perfecto para disfrutar en casa</p>
-                                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1.5rem;">₡2,500</div>
-
-                                        <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity250g', -1)">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <input asp-for="Quantity250g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity250g', 1)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <span asp-validation-for="Quantity250g" class="text-danger small"></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Producto 500g -->
-                            <div class="col-md-6">
-                                <div class="product-card h-100" style="padding: 2rem; border-radius: 16px; transition: var(--transition);">
-                                    <div class="text-center">
-                                        <!-- Imagen real del producto -->
-                                        <div class="product-image-container mb-3">
-                                            <img src="~/images/products/cafe-500g.jpg"
-                                                 alt="Café Susurros 500g"
-                                                 class="order-product-image"
-                                                 style="width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
-                                        </div>
-                                        <h5 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Café Susurros 500g</h5>
-                                        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">Ideal para familias cafeteras</p>
-                                        <div style="font-size: 1.8rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1.5rem;">₡4,500</div>
-
-                                        <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity500g', -1)">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <input asp-for="Quantity500g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('Quantity500g', 1)">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <span asp-validation-for="Quantity500g" class="text-danger small"></span>
-                                    </div>
-                                </div>
+                        <!-- Filtros de Productos -->
+                        <div class="text-center mb-4">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-secondary btn-sm active" data-filter="all">
+                                    Todos
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-filter="molido">
+                                    Molido
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" data-filter="grano">
+                                    En Grano
+                                </button>
                             </div>
                         </div>
 
+                        <!-- Sección de Productos - 6 productos -->
+                        <div class="row g-3">
+
+                            <!-- TUESTE MEDIO MOLIDO 250g -->
+                            <div class="col-md-6 col-lg-4" data-category="molido">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-warning text-dark">🌟 Popular</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-molido-medio-250g.jpg"
+                                                 alt="Tueste Medio Molido 250g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Medio Molido</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">250g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityMedioMolido250g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityMedioMolido250g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TUESTE MEDIO MOLIDO 500g -->
+                            <div class="col-md-6 col-lg-4" data-category="molido">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-success">💰 Valor</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-molido-medio-500g.jpg"
+                                                 alt="Tueste Medio Molido 500g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Medio Molido</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">500g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityMedioMolido500g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityMedioMolido500g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TUESTE OSCURO MOLIDO 250g -->
+                            <div class="col-md-6 col-lg-4" data-category="molido">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-dark text-white">🔥 Intenso</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-molido-oscuro-250g.jpg"
+                                                 alt="Tueste Oscuro Molido 250g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Oscuro Molido</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">250g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityOscuroMolido250g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityOscuroMolido250g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TUESTE OSCURO MOLIDO 500g -->
+                            <div class="col-md-6 col-lg-4" data-category="molido">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-dark text-white">🔥 Familiar</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-molido-oscuro-500g.jpg"
+                                                 alt="Tueste Oscuro Molido 500g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Oscuro Molido</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">500g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityOscuroMolido500g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityOscuroMolido500g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TUESTE MEDIO EN GRANO 250g -->
+                            <div class="col-md-6 col-lg-4" data-category="grano">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-info text-dark">🫘 Grano</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-grano-medio-250g.jpg"
+                                                 alt="Tueste Medio en Grano 250g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Medio en Grano</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">250g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityMedioGrano250g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityMedioGrano250g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TUESTE MEDIO EN GRANO 500g -->
+                            <div class="col-md-6 col-lg-4" data-category="grano">
+                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                                    <div class="text-center">
+                                        <div class="product-badge mb-2">
+                                            <span class="badge bg-info text-dark">🫘 Premium</span>
+                                        </div>
+                                        <div class="product-image-container mb-3">
+                                            <img src="~/images/products/cafe-grano-medio-500g.jpg"
+                                                 alt="Tueste Medio en Grano 500g"
+                                                 class="order-product-image"
+                                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 12px; box-shadow: var(--shadow-soft);">
+                                        </div>
+                                        <h6 style="color: var(--coffee-dark); margin-bottom: 0.5rem;">Tueste Medio en Grano</h6>
+                                        <p style="color: var(--text-light); font-size: 0.8rem; margin-bottom: 0.5rem;">500g</p>
+                                        <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
+
+                                        <div class="quantity-controls">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', -1)">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <input asp-for="QuantityMedioGrano500g" class="quantity-input" min="0" max="50" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', 1)">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                        <span asp-validation-for="QuantityMedioGrano500g" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Resto del formulario igual... -->
                         <!-- Información del Cliente -->
-                        <div class="mb-5">
+                        <div class="mb-5 mt-5">
                             <div class="d-flex align-items-center mb-4">
                                 <i class="fas fa-user" style="font-size: 1.5rem; color: var(--coffee-secondary); margin-right: 0.75rem;"></i>
                                 <h4 class="mb-0" style="color: var(--coffee-dark);">Información de Contacto</h4>
@@ -166,24 +312,48 @@
             </div>
         </div>
 
-        <!-- Resumen del Pedido -->
+        <!-- Resumen del Pedido Actualizado -->
         <div class="col-lg-4">
             <div class="order-summary" id="order-summary" style="display: none;">
                 <div class="summary-header">
                     <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>Resumen del Pedido</h5>
                 </div>
                 <div class="card-body" style="padding: 2rem;">
-                    <!-- Items del pedido -->
-                    <div id="item-250" style="display: none;">
+                    <!-- Items del pedido - 6 productos -->
+                    <div id="item-medio-molido-250" style="display: none;">
                         <div class="summary-item">
-                            <span>Café 250g x<span id="summary-qty-250">0</span></span>
-                            <span id="summary-price-250">₡0</span>
+                            <span>Tueste Medio Molido 250g x<span id="summary-qty-medio-molido-250">0</span></span>
+                            <span id="summary-price-medio-molido-250">₡0</span>
                         </div>
                     </div>
-                    <div id="item-500" style="display: none;">
+                    <div id="item-medio-molido-500" style="display: none;">
                         <div class="summary-item">
-                            <span>Café 500g x<span id="summary-qty-500">0</span></span>
-                            <span id="summary-price-500">₡0</span>
+                            <span>Tueste Medio Molido 500g x<span id="summary-qty-medio-molido-500">0</span></span>
+                            <span id="summary-price-medio-molido-500">₡0</span>
+                        </div>
+                    </div>
+                    <div id="item-oscuro-molido-250" style="display: none;">
+                        <div class="summary-item">
+                            <span>Tueste Oscuro Molido 250g x<span id="summary-qty-oscuro-molido-250">0</span></span>
+                            <span id="summary-price-oscuro-molido-250">₡0</span>
+                        </div>
+                    </div>
+                    <div id="item-oscuro-molido-500" style="display: none;">
+                        <div class="summary-item">
+                            <span>Tueste Oscuro Molido 500g x<span id="summary-qty-oscuro-molido-500">0</span></span>
+                            <span id="summary-price-oscuro-molido-500">₡0</span>
+                        </div>
+                    </div>
+                    <div id="item-medio-grano-250" style="display: none;">
+                        <div class="summary-item">
+                            <span>Tueste Medio Grano 250g x<span id="summary-qty-medio-grano-250">0</span></span>
+                            <span id="summary-price-medio-grano-250">₡0</span>
+                        </div>
+                    </div>
+                    <div id="item-medio-grano-500" style="display: none;">
+                        <div class="summary-item">
+                            <span>Tueste Medio Grano 500g x<span id="summary-qty-medio-grano-500">0</span></span>
+                            <span id="summary-price-medio-grano-500">₡0</span>
                         </div>
                     </div>
 
@@ -229,7 +399,7 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/order-calculator.js"></script>
+    <script src="~/js/order-calculator-6products.js"></script>
     <script>
         function changeQuantity(inputId, change) {
             const input = document.getElementById(inputId);
@@ -241,10 +411,35 @@
             input.dispatchEvent(new Event('input'));
         }
 
+        // Filtros de productos
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('[data-filter]');
+            const products = document.querySelectorAll('[data-category]');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+
+                    // Actualizar botones activos
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filtrar productos
+                    products.forEach(product => {
+                        if (filter === 'all' || product.getAttribute('data-category') === filter) {
+                            product.style.display = 'block';
+                        } else {
+                            product.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+
         // Mejorar la animación de las tarjetas de producto
         document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-8px)';
+                this.style.transform = 'translateY(-5px)';
                 this.style.boxShadow = 'var(--shadow-medium)';
             });
 
@@ -256,10 +451,22 @@
 
         // Validación en tiempo real
         document.getElementById('orderForm').addEventListener('submit', function(e) {
-            const qty250 = parseInt(document.getElementById('Quantity250g').value) || 0;
-            const qty500 = parseInt(document.getElementById('Quantity500g').value) || 0;
+            const quantities = [
+                'QuantityMedioMolido250g',
+                'QuantityMedioMolido500g',
+                'QuantityOscuroMolido250g',
+                'QuantityOscuroMolido500g',
+                'QuantityMedioGrano250g',
+                'QuantityMedioGrano500g'
+            ];
 
-            if (qty250 === 0 && qty500 === 0) {
+            let hasProducts = false;
+            quantities.forEach(id => {
+                const qty = parseInt(document.getElementById(id).value) || 0;
+                if (qty > 0) hasProducts = true;
+            });
+
+            if (!hasProducts) {
                 e.preventDefault();
                 alert('Por favor selecciona al menos un producto');
                 return false;

@@ -29,12 +29,24 @@ namespace Susurros_del_Cafe_WEB.Controllers
                 Console.WriteLine($"=== 🔍 DEBUG COMPLETO DEL PEDIDO ===");
                 Console.WriteLine($"Cliente: '{model.CustomerName}'");
                 Console.WriteLine($"Teléfono: '{model.CustomerPhone}'");
+                Console.WriteLine($"Email: '{model.CustomerEmail}'");
                 Console.WriteLine($"Provincia: '{model.Province}'");
                 Console.WriteLine($"Dirección: '{model.CustomerAddress}'");
                 Console.WriteLine($"Método de pago: {model.PaymentMethod}");
-                Console.WriteLine($"Cantidad 250g: {model.Quantity250g}");
-                Console.WriteLine($"Cantidad 500g: {model.Quantity500g}");
+
+                // 🆕 DEBUG PARA 6 PRODUCTOS
+                Console.WriteLine($"=== 📦 PRODUCTOS SELECCIONADOS ===");
+                Console.WriteLine($"Tueste Medio Molido 250g: {model.QuantityMedioMolido250g}");
+                Console.WriteLine($"Tueste Medio Molido 500g: {model.QuantityMedioMolido500g}");
+                Console.WriteLine($"Tueste Oscuro Molido 250g: {model.QuantityOscuroMolido250g}");
+                Console.WriteLine($"Tueste Oscuro Molido 500g: {model.QuantityOscuroMolido500g}");
+                Console.WriteLine($"Tueste Medio Grano 250g: {model.QuantityMedioGrano250g}");
+                Console.WriteLine($"Tueste Medio Grano 500g: {model.QuantityMedioGrano500g}");
+
                 Console.WriteLine($"HasProducts: {model.HasProducts}");
+                Console.WriteLine($"Subtotal: ₡{model.Subtotal:N0}");
+                Console.WriteLine($"Envío: ₡{model.ShippingCost:N0}");
+                Console.WriteLine($"Total: ₡{model.Total:N0}");
                 Console.WriteLine($"Comentarios: '{model.Comments}'");
 
                 // Verificar ModelState
@@ -65,6 +77,7 @@ namespace Susurros_del_Cafe_WEB.Controllers
                 else
                 {
                     Console.WriteLine("✅ Hay productos seleccionados");
+                    Console.WriteLine($"📋 Resumen: {model.GetProductsSummary()}");
                 }
 
                 Console.WriteLine("🔄 Llamando a CreateOrderAsync...");
@@ -99,13 +112,16 @@ namespace Susurros_del_Cafe_WEB.Controllers
 
                 if (order == null)
                 {
+                    Console.WriteLine($"❌ No se encontró pedido con ID: {id}");
                     return NotFound();
                 }
 
+                Console.WriteLine($"✅ Mostrando confirmación para pedido ID: {id}");
                 return View(order);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine($"❌ Error obteniendo pedido {id}: {ex.Message}");
                 return RedirectToAction("Index", "Home");
             }
         }

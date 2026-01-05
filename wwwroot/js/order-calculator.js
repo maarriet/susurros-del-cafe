@@ -1,86 +1,152 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-    const quantity250Input = document.getElementById('Quantity250g');
-    const quantity500Input = document.getElementById('Quantity500g');
-    const provinceSelect = document.getElementById('Province');
+﻿// order-calculator-6products.js
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('🚀 Order calculator para 6 productos cargado');
 
-    // Price constants
-    const PRICE_250G = 2500;
-    const PRICE_500G = 4500;
-    const SHIPPING_COST = 3200;
+    // Productos y precios
+    const products = {
+        'QuantityMedioMolido250g': { price: 2500, name: 'Tueste Medio Molido 250g' },
+        'QuantityMedioMolido500g': { price: 4500, name: 'Tueste Medio Molido 500g' },
+        'QuantityOscuroMolido250g': { price: 2500, name: 'Tueste Oscuro Molido 250g' },
+        'QuantityOscuroMolido500g': { price: 4500, name: 'Tueste Oscuro Molido 500g' },
+        'QuantityMedioGrano250g': { price: 2500, name: 'Tueste Medio Grano 250g' },
+        'QuantityMedioGrano500g': { price: 4500, name: 'Tueste Medio Grano 500g' }
+    };
+
+    // Agregar event listeners a todos los inputs de cantidad
+    Object.keys(products).forEach(inputId => {
+        const input = document.getElementById(inputId);
+        if (input) {
+            input.addEventListener('input', updateOrderSummary);
+        }
+    });
+
+    // Listener para provincia (para calcular envío)
+    const provinceSelect = document.getElementById('Province');
+    if (provinceSelect) {
+        provinceSelect.addEventListener('change', updateOrderSummary);
+    }
 
     function updateOrderSummary() {
-        const qty250 = parseInt(quantity250Input.value) || 0;
-        const qty500 = parseInt(quantity500Input.value) || 0;
-        const province = provinceSelect.value;
+        let subtotal = 0;
+        let hasProducts = false;
+        const orderSummary = document.getElementById('order-summary');
 
-        // Calculate subtotal
-        const subtotal = (qty250 * PRICE_250G) + (qty500 * PRICE_500G);
+        // Calcular subtotal y mostrar productos
+        Object.keys(products).forEach(inputId => {
+            const input = document.getElementById(inputId);
+            const quantity = parseInt(input?.value) || 0;
 
-        // Calculate shipping
-        const isAlajuela = province.toLowerCase() === 'alajuela';
-        const shipping = isAlajuela ? 0 : SHIPPING_COST;
+            if (quantity > 0) {
+                hasProducts = true;
+                const productPrice = products[inputId].price;
+                const itemTotal = quantity * productPrice;
+                subtotal += itemTotal;
 
-        // Calculate total
-        const total = subtotal + shipping;
+                // Mostrar item en resumen
+                showSummaryItem(inputId, quantity, itemTotal, products[inputId].name);
+            } else {
+                // Ocultar item si cantidad es 0
+                hideSummaryItem(inputId);
+            }
+        });
 
-        // Update display
-        updateSummaryDisplay(qty250, qty500, subtotal, shipping, total, isAlajuela);
+        // Calcular envío
+        const province = document.getElementById('Province')?.value;
+        const shippingCost = province === 'Alajuela' ? 0 : 3200;
 
-        // Show/hide summary and individual items
-        const summaryDiv = document.getElementById('order-summary');
-        const item250 = document.getElementById('item-250');
-        const item500 = document.getElementById('item-500');
+        // Calcular total
+        const total = subtotal + shippingCost;
 
-        if (qty250 > 0 || qty500 > 0) {
-            summaryDiv.style.display = 'block';
-            summaryDiv.style.animation = 'fadeInUp 0.5s ease-out';
-        } else {
-            summaryDiv.style.display = 'none';
+        // Actualizar resumen
+        updateSummaryTotals(subtotal, shippingCost, total, province);
+
+        // Mostrar/ocultar resumen
+        if (orderSummary) {
+            orderSummary.style.display = hasProducts ? 'block' : 'none';
         }
-
-        // Show/hide individual items
-        item250.style.display = qty250 > 0 ? 'block' : 'none';
-        item500.style.display = qty500 > 0 ? 'block' : 'none';
     }
 
-    function updateSummaryDisplay(qty250, qty500, subtotal, shipping, total, isAlajuela) {
-        // Update quantities
-        document.getElementById('summary-qty-250').textContent = qty250;
-        document.getElementById('summary-qty-500').textContent = qty500;
+    function showSummaryItem(inputId, quantity, itemTotal, productName) {
+        const itemId = getItemId(inputId);
+        const itemElement = document.getElementById(itemId);
 
-        // Update prices
-        document.getElementById('summary-price-250').textContent =
-            formatCurrency(qty250 * PRICE_250G);
-        document.getElementById('summary-price-500').textContent =
-            formatCurrency(qty500 * PRICE_500G);
+        if (itemElement) {
+            itemElement.style.display = 'block';
 
-        // Update totals
-        document.getElementById('summary-subtotal').textContent = formatCurrency(subtotal);
-        document.getElementById('summary-shipping').textContent = shipping === 0 ? 'Gratis' : formatCurrency(shipping);
-        document.getElementById('summary-total').textContent = formatCurrency(total);
+            // Actualizar cantidad y precio
+            const qtyElement = document.getElementById(`summary-qty-${getProductKey(inputId)}`);
+            const priceElement = document.getElementById(`summary-price-${getProductKey(inputId)}`);
 
-        // Update shipping info
+            if (qtyElement) qtyElement.textContent = quantity;
+            if (priceElement) priceElement.textContent = `₡${itemTotal.toLocaleString()}`;
+        }
+    }
+
+    function hideSummaryItem(inputId) {
+        const itemId = getItemId(inputId);
+        const itemElement = document.getElementById(itemId);
+
+        if (itemElement) {
+            itemElement.style.display = 'none';
+        }
+    }
+
+    function getItemId(inputId) {
+        const mapping = {
+            'QuantityMedioMolido250g': 'item-medio-molido-250',
+            'QuantityMedioMolido500g': 'item-medio-molido-500',
+            'QuantityOscuroMolido250g': 'item-oscuro-molido-250',
+            'QuantityOscuroMolido500g': 'item-oscuro-molido-500',
+            'QuantityMedioGrano250g': 'item-medio-grano-250',
+            'QuantityMedioGrano500g': 'item-medio-grano-500'
+        };
+        return mapping[inputId];
+    }
+
+    function getProductKey(inputId) {
+        const mapping = {
+            'QuantityMedioMolido250g': 'medio-molido-250',
+            'QuantityMedioMolido500g': 'medio-molido-500',
+            'QuantityOscuroMolido250g': 'oscuro-molido-250',
+            'QuantityOscuroMolido500g': 'oscuro-molido-500',
+            'QuantityMedioGrano250g': 'medio-grano-250',
+            'QuantityMedioGrano500g': 'medio-grano-500'
+        };
+        return mapping[inputId];
+    }
+
+    function updateSummaryTotals(subtotal, shippingCost, total, province) {
+        // Actualizar subtotal
+        const subtotalElement = document.getElementById('summary-subtotal');
+        if (subtotalElement) {
+            subtotalElement.textContent = `₡${subtotal.toLocaleString()}`;
+        }
+
+        // Actualizar envío
+        const shippingElement = document.getElementById('summary-shipping');
+        if (shippingElement) {
+            shippingElement.textContent = shippingCost === 0 ? '¡Gratis!' : `₡${shippingCost.toLocaleString()}`;
+        }
+
+        // Actualizar info de envío
         const shippingInfo = document.getElementById('shipping-info');
-        if (isAlajuela) {
-            shippingInfo.textContent = '🚚 ¡Envío gratis a Alajuela!';
-            shippingInfo.className = 'small text-success mb-3';
-        } else if (province) {
-            shippingInfo.textContent = '📦 Envío por Correos de Costa Rica';
-            shippingInfo.className = 'small text-info mb-3';
-        } else {
-            shippingInfo.textContent = '';
+        if (shippingInfo) {
+            if (shippingCost === 0) {
+                shippingInfo.textContent = '✅ Envío gratis a Alajuela';
+                shippingInfo.className = 'small text-success mb-3';
+            } else {
+                shippingInfo.textContent = `📦 Envío a ${province || 'provincia seleccionada'}`;
+                shippingInfo.className = 'small text-info mb-3';
+            }
+        }
+
+        // Actualizar total
+        const totalElement = document.getElementById('summary-total');
+        if (totalElement) {
+            totalElement.textContent = `₡${total.toLocaleString()}`;
         }
     }
 
-    function formatCurrency(amount) {
-        return '₡' + amount.toLocaleString('es-CR');
-    }
-
-    // Event listeners
-    if (quantity250Input) quantity250Input.addEventListener('input', updateOrderSummary);
-    if (quantity500Input) quantity500Input.addEventListener('input', updateOrderSummary);
-    if (provinceSelect) provinceSelect.addEventListener('change', updateOrderSummary);
-
-    // Initial calculation
+    // Inicializar
     updateOrderSummary();
 });

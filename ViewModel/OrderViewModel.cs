@@ -5,19 +5,30 @@ namespace Susurros_del_Cafe_WEB.ViewModels
 {
     public class OrderViewModel
     {
-        // PRODUCTOS
-        [Display(Name = "Café 250g")]
-        public int Quantity250g { get; set; } = 0;
+        // PRODUCTOS - 6 VARIEDADES
+        [Display(Name = "Tueste Medio Molido 250g")]
+        public int QuantityMedioMolido250g { get; set; } = 0;
 
-        [Display(Name = "Café 500g")]
-        public int Quantity500g { get; set; } = 0;
+        [Display(Name = "Tueste Medio Molido 500g")]
+        public int QuantityMedioMolido500g { get; set; } = 0;
+
+        [Display(Name = "Tueste Oscuro Molido 250g")]
+        public int QuantityOscuroMolido250g { get; set; } = 0;
+
+        [Display(Name = "Tueste Oscuro Molido 500g")]
+        public int QuantityOscuroMolido500g { get; set; } = 0;
+
+        [Display(Name = "Tueste Medio en Grano 250g")]
+        public int QuantityMedioGrano250g { get; set; } = 0;
+
+        [Display(Name = "Tueste Medio en Grano 500g")]
+        public int QuantityMedioGrano500g { get; set; } = 0;
 
         // INFORMACIÓN DEL CLIENTE
         [Required(ErrorMessage = "El nombre es requerido")]
         [Display(Name = "Nombre completo")]
         public string CustomerName { get; set; } = string.Empty;
 
-        // 🆕 AGREGAR ESTA PROPIEDAD
         [Required(ErrorMessage = "El email es requerido")]
         [EmailAddress(ErrorMessage = "Formato de email inválido")]
         public string CustomerEmail { get; set; } = string.Empty;
@@ -42,46 +53,128 @@ namespace Susurros_del_Cafe_WEB.ViewModels
         [Display(Name = "Comentarios adicionales")]
         public string? Comments { get; set; }
 
-        // PROPIEDADES CALCULADAS
-        public decimal Subtotal => (Quantity250g * 3500) + (Quantity500g * 6500);
-        public decimal ShippingCost => Province == "Alajuela" ? 0 : 1500;
-        public decimal Total => Subtotal + ShippingCost;
-        public bool HasProducts => Quantity250g > 0 || Quantity500g > 0;
+        // PROPIEDADES CALCULADAS - ACTUALIZADAS PARA 6 PRODUCTOS
+        public decimal Subtotal =>
+            (QuantityMedioMolido250g * 2500) +
+            (QuantityMedioMolido500g * 4500) +
+            (QuantityOscuroMolido250g * 2500) +
+            (QuantityOscuroMolido500g * 4500) +
+            (QuantityMedioGrano250g * 2500) +
+            (QuantityMedioGrano500g * 4500);
 
-        // MÉTODO PARA OBTENER ITEMS DEL PEDIDO
+        public decimal ShippingCost => Province == "Alajuela" ? 0 : 3200; // CORREGIDO A 3200
+
+        public decimal Total => Subtotal + ShippingCost;
+
+        public bool HasProducts =>
+            QuantityMedioMolido250g > 0 ||
+            QuantityMedioMolido500g > 0 ||
+            QuantityOscuroMolido250g > 0 ||
+            QuantityOscuroMolido500g > 0 ||
+            QuantityMedioGrano250g > 0 ||
+            QuantityMedioGrano500g > 0;
+
+        // MÉTODO PARA OBTENER ITEMS DEL PEDIDO - ACTUALIZADO
         public List<OrderItemViewModel> GetOrderItems()
         {
             var items = new List<OrderItemViewModel>();
 
-            if (Quantity250g > 0)
+            if (QuantityMedioMolido250g > 0)
             {
                 items.Add(new OrderItemViewModel
                 {
                     ProductId = 1,
-                    ProductName = "Café Susurros 250g",
-                    Quantity = Quantity250g,
-                    UnitPrice = 3500,
-                    Subtotal = Quantity250g * 3500
+                    ProductName = "Tueste Medio Molido 250g",
+                    Quantity = QuantityMedioMolido250g,
+                    UnitPrice = 2500,
+                    Subtotal = QuantityMedioMolido250g * 2500
                 });
             }
 
-            if (Quantity500g > 0)
+            if (QuantityMedioMolido500g > 0)
             {
                 items.Add(new OrderItemViewModel
                 {
                     ProductId = 2,
-                    ProductName = "Café Susurros 500g",
-                    Quantity = Quantity500g,
-                    UnitPrice = 6500,
-                    Subtotal = Quantity500g * 6500
+                    ProductName = "Tueste Medio Molido 500g",
+                    Quantity = QuantityMedioMolido500g,
+                    UnitPrice = 4500,
+                    Subtotal = QuantityMedioMolido500g * 4500
+                });
+            }
+
+            if (QuantityOscuroMolido250g > 0)
+            {
+                items.Add(new OrderItemViewModel
+                {
+                    ProductId = 3,
+                    ProductName = "Tueste Oscuro Molido 250g",
+                    Quantity = QuantityOscuroMolido250g,
+                    UnitPrice = 2500,
+                    Subtotal = QuantityOscuroMolido250g * 2500
+                });
+            }
+
+            if (QuantityOscuroMolido500g > 0)
+            {
+                items.Add(new OrderItemViewModel
+                {
+                    ProductId = 4,
+                    ProductName = "Tueste Oscuro Molido 500g",
+                    Quantity = QuantityOscuroMolido500g,
+                    UnitPrice = 4500,
+                    Subtotal = QuantityOscuroMolido500g * 4500
+                });
+            }
+
+            if (QuantityMedioGrano250g > 0)
+            {
+                items.Add(new OrderItemViewModel
+                {
+                    ProductId = 5,
+                    ProductName = "Tueste Medio en Grano 250g",
+                    Quantity = QuantityMedioGrano250g,
+                    UnitPrice = 2500,
+                    Subtotal = QuantityMedioGrano250g * 2500
+                });
+            }
+
+            if (QuantityMedioGrano500g > 0)
+            {
+                items.Add(new OrderItemViewModel
+                {
+                    ProductId = 6,
+                    ProductName = "Tueste Medio en Grano 500g",
+                    Quantity = QuantityMedioGrano500g,
+                    UnitPrice = 4500,
+                    Subtotal = QuantityMedioGrano500g * 4500
                 });
             }
 
             return items;
         }
 
-    }
+        // 🆕 MÉTODO PARA OBTENER RESUMEN DE PRODUCTOS SELECCIONADOS
+        public string GetProductsSummary()
+        {
+            var products = new List<string>();
 
+            if (QuantityMedioMolido250g > 0)
+                products.Add($"{QuantityMedioMolido250g}x Tueste Medio Molido 250g");
+            if (QuantityMedioMolido500g > 0)
+                products.Add($"{QuantityMedioMolido500g}x Tueste Medio Molido 500g");
+            if (QuantityOscuroMolido250g > 0)
+                products.Add($"{QuantityOscuroMolido250g}x Tueste Oscuro Molido 250g");
+            if (QuantityOscuroMolido500g > 0)
+                products.Add($"{QuantityOscuroMolido500g}x Tueste Oscuro Molido 500g");
+            if (QuantityMedioGrano250g > 0)
+                products.Add($"{QuantityMedioGrano250g}x Tueste Medio Grano 250g");
+            if (QuantityMedioGrano500g > 0)
+                products.Add($"{QuantityMedioGrano500g}x Tueste Medio Grano 500g");
+
+            return string.Join(", ", products);
+        }
+    }
 
     public class OrderItemViewModel
     {

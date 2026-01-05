@@ -33,8 +33,9 @@ namespace Susurros_del_Cafe_WEB.Services
                 Console.WriteLine($"📝 Datos recibidos:");
                 Console.WriteLine($"   - Cliente: {orderViewModel.CustomerName}");
                 Console.WriteLine($"   - Teléfono: {orderViewModel.CustomerPhone}");
-                Console.WriteLine($"   - Provincia: '{orderViewModel.Province}'"); // ✅ Verificar que llega
+                Console.WriteLine($"   - Provincia: '{orderViewModel.Province}'");
                 Console.WriteLine($"   - Dirección: '{orderViewModel.CustomerAddress}'");
+                Console.WriteLine($"   - Productos: {orderViewModel.GetProductsSummary()}");
 
                 // Verificar conexión a DB
                 var canConnect = await _context.Database.CanConnectAsync();
@@ -52,17 +53,15 @@ namespace Susurros_del_Cafe_WEB.Services
 
                 Console.WriteLine($"👤 Creando cliente...");
 
-                // ✅ ASEGURAR QUE PROVINCE SE ASIGNE CORRECTAMENTE
                 var customer = new Customer
                 {
                     Name = orderViewModel.CustomerName,
                     Email = orderViewModel.CustomerEmail,
                     Phone = orderViewModel.CustomerPhone,
                     Address = orderViewModel.CustomerAddress,
-                    Province = orderViewModel.Province ?? "No especificada" // ✅ AGREGAR ESTA LÍNEA
+                    Province = orderViewModel.Province ?? "No especificada"
                 };
 
-                // ✅ VERIFICAR ANTES DE GUARDAR
                 Console.WriteLine($"📋 Verificando datos del cliente antes de guardar:");
                 Console.WriteLine($"   - Name: '{customer.Name}'");
                 Console.WriteLine($"   - Phone: '{customer.Phone}'");
@@ -85,7 +84,6 @@ namespace Susurros_del_Cafe_WEB.Services
                     throw new Exception($"Error creando cliente: {ex.InnerException?.Message ?? ex.Message}");
                 }
 
-                // Resto del código igual...
                 Console.WriteLine($"📦 Creando pedido...");
                 var order = new Order
                 {
@@ -97,39 +95,24 @@ namespace Susurros_del_Cafe_WEB.Services
 
                 decimal totalAmount = 0;
 
-                // Producto 250g
-                if (orderViewModel.Quantity250g > 0)
-                {
-                    Console.WriteLine($"📦 Procesando producto 250g...");
-                    var product250 = await GetOrCreateProductSafe("Café Susurros 250g", 2500, "Café artesanal 250g");
+                // 🆕 PROCESAMIENTO DE 6 PRODUCTOS - SIN REF
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityMedioMolido250g,
+                    "Tueste Medio Molido 250g", 2500);
 
-                    order.OrderItems.Add(new OrderItem
-                    {
-                        ProductId = product250.Id,
-                        Quantity = orderViewModel.Quantity250g,
-                        UnitPrice = 2500
-                    });
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityMedioMolido500g,
+                    "Tueste Medio Molido 500g", 4500);
 
-                    totalAmount += orderViewModel.Quantity250g * 2500;
-                    Console.WriteLine($"✅ Producto 250g agregado");
-                }
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityOscuroMolido250g,
+                    "Tueste Oscuro Molido 250g", 2500);
 
-                // Producto 500g
-                if (orderViewModel.Quantity500g > 0)
-                {
-                    Console.WriteLine($"📦 Procesando producto 500g...");
-                    var product500 = await GetOrCreateProductSafe("Café Susurros 500g", 4500, "Café artesanal 500g");
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityOscuroMolido500g,
+                    "Tueste Oscuro Molido 500g", 4500);
 
-                    order.OrderItems.Add(new OrderItem
-                    {
-                        ProductId = product500.Id,
-                        Quantity = orderViewModel.Quantity500g,
-                        UnitPrice = 4500
-                    });
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityMedioGrano250g,
+                    "Tueste Medio en Grano 250g", 2500);
 
-                    totalAmount += orderViewModel.Quantity500g * 4500;
-                    Console.WriteLine($"✅ Producto 500g agregado");
-                }
+                totalAmount += await ProcessProduct(order, orderViewModel.QuantityMedioGrano500g,
+                    "Tueste Medio en Grano 500g", 4500);
 
                 // Costo de envío
                 decimal shippingCost = orderViewModel.Province == "Alajuela" ? 0 : 3200;
@@ -179,6 +162,30 @@ namespace Susurros_del_Cafe_WEB.Services
                 throw;
             }
         }
+
+        // 🆕 MÉTODO CORREGIDO - RETORNA EL SUBTOTAL EN LUGAR DE USAR REF
+        private async Task<decimal> ProcessProduct(Order order, int quantity, string productName, decimal price)
+        {
+            if (quantity > 0)
+            {
+                Console.WriteLine($"📦 Procesando {productName} - Cantidad: {quantity}");
+                var product = await GetOrCreateProductSafe(productName, price, $"Café artesanal - {productName}");
+
+                order.OrderItems.Add(new OrderItem
+                {
+                    ProductId = product.Id,
+                    Quantity = quantity,
+                    UnitPrice = price
+                });
+
+                var subtotal = quantity * price;
+                Console.WriteLine($"✅ {productName} agregado - Subtotal: ₡{subtotal:N0}");
+                return subtotal;
+            }
+
+            return 0;
+        }
+
         // ✅ MÉTODO SEGURO PARA CREAR/OBTENER PRODUCTOS
         private async Task<Product> GetOrCreateProductSafe(string name, decimal price, string description)
         {
@@ -285,87 +292,42 @@ namespace Susurros_del_Cafe_WEB.Services
             return true;
         }
 
-        // ✅ MÉTODOS AUXILIARES
-        private async Task<Product> GetOrCreateProduct(string name, decimal price, string description)
-        {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Name == name);
-            if (product == null)
-            {
-                product = new Product
-                {
-                    Name = name,
-                    Price = price,
-                    Description = description
-                };
-                _context.Products.Add(product);
-                await _context.SaveChangesAsync();
-            }
-            return product;
-        }
-
-        private bool HasTotalAmountProperty(Order order)
-        {
-            return order.GetType().GetProperty("TotalAmount") != null;
-        }
-
-        private bool HasNotesProperty(Order order)
-        {
-            return order.GetType().GetProperty("Notes") != null;
-        }
-
-        private void SetTotalAmount(Order order, decimal amount)
-        {
-            var property = order.GetType().GetProperty("TotalAmount");
-            property?.SetValue(order, amount);
-        }
-
-        private void SetNotes(Order order, string? notes)
-        {
-            var property = order.GetType().GetProperty("Notes");
-            property?.SetValue(order, notes);
-        }
-
-
-        // 🆕 NUEVO MÉTODO - Actualizar precios de productos
+        // 🆕 ACTUALIZAR PRECIOS PARA 6 PRODUCTOS
         public async Task UpdateProductPricesAsync()
         {
             try
             {
                 Console.WriteLine("🔄 Actualizando precios de productos...");
 
-                // Buscar productos existentes por nombre
-                var product250 = await _context.Products
-                    .FirstOrDefaultAsync(p => p.Name.Contains("250g"));
-                var product500 = await _context.Products
-                    .FirstOrDefaultAsync(p => p.Name.Contains("500g"));
+                var productUpdates = new Dictionary<string, decimal>
+                {
+                    { "Tueste Medio Molido 250g", 2500 },
+                    { "Tueste Medio Molido 500g", 4500 },
+                    { "Tueste Oscuro Molido 250g", 2500 },
+                    { "Tueste Oscuro Molido 500g", 4500 },
+                    { "Tueste Medio en Grano 250g", 2500 },
+                    { "Tueste Medio en Grano 500g", 4500 }
+                };
 
                 bool updated = false;
 
-                // Actualizar producto 250g
-                if (product250 != null && product250.Price != 2500)
+                foreach (var productUpdate in productUpdates)
                 {
-                    Console.WriteLine($"📦 Actualizando precio 250g: ₡{product250.Price:N0} → ₡2,500");
-                    product250.Price = 2500;
-                    updated = true;
-                }
-                else if (product250 != null)
-                {
-                    Console.WriteLine($"✅ Producto 250g ya tiene el precio correcto: ₡{product250.Price:N0}");
+                    var product = await _context.Products
+                        .FirstOrDefaultAsync(p => p.Name == productUpdate.Key);
+
+                    if (product != null && product.Price != productUpdate.Value)
+                    {
+                        Console.WriteLine($"📦 Actualizando {productUpdate.Key}: ₡{product.Price:N0} → ₡{productUpdate.Value:N0}");
+                        product.Price = productUpdate.Value;
+                        updated = true;
+                    }
+                    else if (product != null)
+                    {
+                        Console.WriteLine($"✅ {productUpdate.Key} ya tiene el precio correcto: ₡{product.Price:N0}");
+                    }
                 }
 
-                // Actualizar producto 500g
-                if (product500 != null && product500.Price != 4500)
-                {
-                    Console.WriteLine($"📦 Actualizando precio 500g: ₡{product500.Price:N0} → ₡4,500");
-                    product500.Price = 4500;
-                    updated = true;
-                }
-                else if (product500 != null)
-                {
-                    Console.WriteLine($"✅ Producto 500g ya tiene el precio correcto: ₡{product500.Price:N0}");
-                }
-
-                // Guardar cambios si hubo actualizaciones
                 if (updated)
                 {
                     await _context.SaveChangesAsync();
@@ -375,22 +337,13 @@ namespace Susurros_del_Cafe_WEB.Services
                 {
                     Console.WriteLine("ℹ️ Todos los precios ya están actualizados");
                 }
-
-                // Verificar si no existen productos
-                if (product250 == null && product500 == null)
-                {
-                    Console.WriteLine("⚠️ No se encontraron productos para actualizar");
-                    Console.WriteLine("💡 Los productos se crearán automáticamente con el próximo pedido");
-                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"❌ Error actualizando precios: {ex.Message}");
-                Console.WriteLine($"   InnerException: {ex.InnerException?.Message}");
                 throw new Exception($"Error actualizando precios: {ex.InnerException?.Message ?? ex.Message}");
             }
         }
-
-    } // ← Cierre de la clase OrderService
+    }
 }
 
