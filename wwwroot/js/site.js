@@ -20,3 +20,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
     images.forEach(img => imageObserver.observe(img));
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const products = document.querySelectorAll('[data-category]');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const filter = this.getAttribute('data-filter');
+
+            // Actualizar botones activos
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            // Filtrar productos
+            products.forEach(product => {
+                if (filter === 'all' || product.getAttribute('data-category') === filter) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
+            });
+        });
+    });
+});

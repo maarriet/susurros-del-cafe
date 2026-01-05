@@ -5,16 +5,44 @@
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="container">
+        <!-- Banner Cosecha 2025 -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="cosecha-banner text-center fade-in-up">
+                    <span class="cosecha-badge">🌱 COSECHA 2025 - EDICIÓN LIMITADA 🌱</span>
+                    <p class="cosecha-text mb-0">Stock limitado disponible • Reserva antes que se agoten</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row align-items-center min-vh-75">
             <div class="col-lg-6 hero-content">
                 <h1 class="hero-title fade-in-up">Susurros del Café</h1>
-                <p class="hero-subtitle fade-in-up">Café artesanal premium de Costa Rica. Cada grano seleccionado a mano, tostado con maestría, entregado con pasión.</p>
+                <p class="hero-subtitle fade-in-up">
+                    Café artesanal premium de Costa Rica. Cada grano seleccionado a mano, tostado con maestría, entregado con pasión.
+                </p>
+
+                <!-- Características destacadas -->
+                <div class="hero-features fade-in-up mb-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge">🌱 Cosecha 2025</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge stock-limitado">📦 Stock Limitado</span>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <span class="feature-badge">🚚 Envío Nacional</span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="hero-actions fade-in-up">
                     <a href="@Url.Action("Create", "Order")" class="btn btn-coffee btn-lg me-3">
-                        Hacer Pedido
+                        <i class="fas fa-shopping-cart me-2"></i>Hacer Pedido
                     </a>
                     <a href="#productos" class="btn btn-coffee-outline btn-lg">
-                        Ver Productos
+                        <i class="fas fa-eye me-2"></i>Ver Productos
                     </a>
                 </div>
             </div>
@@ -94,36 +122,56 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-4 mb-4">Nuestros Cafés Premium</h2>
-            <p class="lead" style="color: var(--coffee-gray); max-width: 600px; margin: 0 auto;">
-                Dos presentaciones perfectas para cada momento. Calidad excepcional en cada taza.
+            <p class="lead" style="color: var(--coffee-gray); max-width: 700px; margin: 0 auto;">
+                Línea completa de cafés artesanales. Dos tipos de tueste, dos presentaciones,
+                máxima calidad en cada variedad.
             </p>
         </div>
 
-        <div class="row g-5 justify-content-center">
-            <div class="col-lg-5">
-                <div class="coffee-card fade-in-up">
-                    <div class="card-body">
+        <!-- Filtros de Categoría -->
+        <div class="text-center mb-5">
+            <div class="btn-group" role="group" aria-label="Filtros de café">
+                <button type="button" class="btn btn-outline-secondary active" data-filter="all">
+                    Todos los Cafés
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="molido">
+                    Café Molido
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-filter="grano">
+                    Café en Grano
+                </button>
+            </div>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <!-- TUESTE MEDIO MOLIDO 250g -->
+            <div class="col-lg-6 col-xl-4" data-category="molido">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
-                            <!-- Imagen real del producto 250g -->
-                            <div class="product-image-container mb-3">
-                                <img src="~/images/products/cafe-250g.jpg"
-                                     alt="Café Susurros 250g"
-                                     class="product-image"
-                                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-warning text-dark">🌟 Más Popular</span>
                             </div>
-                            <h3 class="card-title mb-3">Café Susurros 250g</h3>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste medio 250g.png"
+                                     alt="Café Molido Tueste Medio 250g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Medio Molido</h5>
+                            <p class="text-muted small mb-3">250g • Equilibrio perfecto</p>
                             <div class="price-tag">₡2,500</div>
                         </div>
 
-                        <ul class="feature-list">
-                            <li><i class="fas fa-check"></i> Café 100% costarricense de altura</li>
-                            <li><i class="fas fa-check"></i> Tostado artesanal en pequeños lotes</li>
-                            <li><i class="fas fa-check"></i> Empaque sellado al vacío</li>
-                            <li><i class="fas fa-check"></i> Notas dulces</li>
-                            <li><i class="fas fa-check"></i> Aproximadamente 25 tazas</li>
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Tueste medio balanceado</li>
+                            <li><i class="fas fa-check"></i> Notas dulces y frutales</li>
+                            <li><i class="fas fa-check"></i> Molido ideal para filtro</li>
+                            <li><i class="fas fa-check"></i> ~25 tazas</li>
                         </ul>
 
-                        <div class="text-center">
+                        <div class="text-center mt-auto">
                             <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
                                 Agregar al Pedido
                             </a>
@@ -132,33 +180,224 @@
                 </div>
             </div>
 
-            <div class="col-lg-5">
-                <div class="coffee-card fade-in-up">
-                    <div class="card-body">
+            <!-- TUESTE MEDIO MOLIDO 500g -->
+            <div class="col-lg-6 col-xl-4" data-category="molido">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
-                            <!-- Imagen real del producto 500g -->
-                            <div class="product-image-container mb-3">
-                                <img src="~/images/products/cafe-500g.jpg"
-                                     alt="Café Susurros 500g"
-                                     class="product-image"
-                                     style="width: 200px; height: 200px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-success">💰 Mejor Valor</span>
                             </div>
-                            <h3 class="card-title mb-3">Café Susurros 500g</h3>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste medio 250g.png"
+                                     alt="Café Molido Tueste Medio 500g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Medio Molido</h5>
+                            <p class="text-muted small mb-3">500g • Presentación familiar</p>
                             <div class="price-tag">₡4,500</div>
                         </div>
 
-                        <ul class="feature-list">
-                            <li><i class="fas fa-check"></i> Presentación familiar premium</li>
-                            <li><i class="fas fa-check"></i> Mejor valor por gramo</li>
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Presentación familiar</li>
+                            <li><i class="fas fa-check"></i> Mejor precio por gramo</li>
                             <li><i class="fas fa-check"></i> Empaque resellable</li>
-                            <li><i class="fas fa-check"></i> Perfil de sabor complejo</li>
-                            <li><i class="fas fa-check"></i> Aproximadamente 50 tazas</li>
+                            <li><i class="fas fa-check"></i> ~50 tazas</li>
                         </ul>
 
-                        <div class="text-center">
+                        <div class="text-center mt-auto">
                             <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
                                 Agregar al Pedido
                             </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TUESTE OSCURO MOLIDO 250g -->
+            <div class="col-lg-6 col-xl-4" data-category="molido">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-dark text-white">🔥 Intenso</span>
+                            </div>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
+                                     alt="Café Molido Tueste Oscuro 250g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Oscuro Molido</h5>
+                            <p class="text-muted small mb-3">250g • Sabor robusto</p>
+                            <div class="price-tag">₡2,500</div>
+                        </div>
+
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Tueste oscuro artesanal</li>
+                            <li><i class="fas fa-check"></i> Notas achocolatadas</li>
+                            <li><i class="fas fa-check"></i> Sabor intenso y robusto</li>
+                            <li><i class="fas fa-check"></i> ~25 tazas</li>
+                        </ul>
+
+                        <div class="text-center mt-auto">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TUESTE OSCURO MOLIDO 500g -->
+            <div class="col-lg-6 col-xl-4" data-category="molido">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-dark text-white">🔥 Familiar</span>
+                            </div>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
+                                     alt="Café Molido Tueste Oscuro 500g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Oscuro Molido</h5>
+                            <p class="text-muted small mb-3">500g • Intensidad familiar</p>
+                            <div class="price-tag">₡4,500</div>
+                        </div>
+
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Tueste oscuro intenso</li>
+                            <li><i class="fas fa-check"></i> Presentación económica</li>
+                            <li><i class="fas fa-check"></i> Perfecto para espresso</li>
+                            <li><i class="fas fa-check"></i> ~50 tazas</li>
+                        </ul>
+
+                        <div class="text-center mt-auto">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TUESTE MEDIO EN GRANO 250g -->
+            <div class="col-lg-6 col-xl-4" data-category="grano">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-info text-dark">🫘 Grano Entero</span>
+                            </div>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
+                                     alt="Café en Grano Tueste Medio 250g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Medio en Grano</h5>
+                            <p class="text-muted small mb-3">250g • Máxima frescura</p>
+                            <div class="price-tag">₡2,500</div>
+                        </div>
+
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Grano entero premium</li>
+                            <li><i class="fas fa-check"></i> Máxima frescura</li>
+                            <li><i class="fas fa-check"></i> Control total del molido</li>
+                            <li><i class="fas fa-check"></i> ~25 tazas</li>
+                        </ul>
+
+                        <div class="text-center mt-auto">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TUESTE MEDIO EN GRANO 500g -->
+            <div class="col-lg-6 col-xl-4" data-category="grano">
+                <div class="coffee-card fade-in-up h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="text-center mb-4">
+                            <div class="product-badge mb-2">
+                                <span class="badge bg-info text-dark">🫘 Premium</span>
+                            </div>
+                            <div class="product-image-container mb-3">
+                                <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
+                                     alt="Café en Grano Tueste Medio 500g"
+                                     class="product-image"
+                                     style="width: 160px; height: 160px; object-fit: cover; border-radius: 15px; box-shadow: var(--shadow-soft);">
+                            </div>
+                            <h5 class="card-title mb-2">Tueste Medio en Grano</h5>
+                            <p class="text-muted small mb-3">500g • Experiencia premium</p>
+                            <div class="price-tag">₡4,500</div>
+                        </div>
+
+                        <ul class="feature-list flex-grow-1">
+                            <li><i class="fas fa-check"></i> Grano entero familiar</li>
+                            <li><i class="fas fa-check"></i> Frescura garantizada</li>
+                            <li><i class="fas fa-check"></i> Ideal para espresso/prensa</li>
+                            <li><i class="fas fa-check"></i> ~50 tazas</li>
+                        </ul>
+
+                        <div class="text-center mt-auto">
+                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                Agregar al Pedido
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tabla comparativa -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card" style="border-radius: 20px; border: none; box-shadow: var(--shadow-soft);">
+                    <div class="card-body p-4">
+                        <h5 class="text-center mb-4">📊 Guía Rápida de Productos</h5>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Presentación</th>
+                                        <th>Precio</th>
+                                        <th>Tazas Aprox.</th>
+                                        <th>Mejor Para</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Tueste Medio Molido</strong></td>
+                                        <td>250g / 500g</td>
+                                        <td>₡2,500 / ₡4,500</td>
+                                        <td>25 / 50</td>
+                                        <td>Cafetera de filtro, prensa francesa</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tueste Oscuro Molido</strong></td>
+                                        <td>250g / 500g</td>
+                                        <td>₡2,500 / ₡4,500</td>
+                                        <td>25 / 50</td>
+                                        <td>Espresso, cafetera italiana</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tueste Medio en Grano</strong></td>
+                                        <td>250g / 500g</td>
+                                        <td>₡2,500 / ₡4,500</td>
+                                        <td>25 / 50</td>
+                                        <td>Molienda fresca, máxima calidad</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
