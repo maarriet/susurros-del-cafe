@@ -1,5 +1,14 @@
-﻿@{
+﻿@model List<Susurros_del_Cafe_WEB.Models.Product>
+@{
     ViewData["Title"] = "Inicio";
+
+    // Definir todas las variables de productos al inicio
+    var medioMolido250 = Model.FirstOrDefault(p => p.Name == "Tueste Medio Molido 250g");
+    var medioMolido500 = Model.FirstOrDefault(p => p.Name == "Tueste Medio Molido 500g");
+    var oscuroMolido250 = Model.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 250g");
+    var oscuroMolido500 = Model.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 500g");
+    var medioGrano250 = Model.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 250g");
+    var medioGrano500 = Model.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 500g");
 }
 
 <!-- Hero Section -->
@@ -111,8 +120,6 @@
                     </div>
                 </div>
             </div>
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -147,11 +154,18 @@
 
             <!-- TUESTE MEDIO MOLIDO 250g -->
             <div class="col-lg-6 col-xl-4" data-category="molido">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(medioMolido250?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-warning text-dark">🌟 Más Popular</span>
+                                @if (medioMolido250?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">🌟 Más Popular</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste medio 250g.png"
@@ -172,9 +186,18 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (medioMolido250?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -182,11 +205,18 @@
 
             <!-- TUESTE MEDIO MOLIDO 500g -->
             <div class="col-lg-6 col-xl-4" data-category="molido">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(medioMolido500?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-success">💰 Familiar Económico</span>
+                                @if (medioMolido500?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">💰 Familiar Económico</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste medio 250g.png"
@@ -207,9 +237,18 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (medioMolido500?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -217,11 +256,18 @@
 
             <!-- TUESTE OSCURO MOLIDO 250g -->
             <div class="col-lg-6 col-xl-4" data-category="molido">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(oscuroMolido250?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-dark text-white">🔥 Intenso</span>
+                                @if (oscuroMolido250?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-dark text-white">🔥 Intenso</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
@@ -242,9 +288,18 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (oscuroMolido250?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -252,11 +307,18 @@
 
             <!-- TUESTE OSCURO MOLIDO 500g -->
             <div class="col-lg-6 col-xl-4" data-category="molido">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(oscuroMolido500?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-dark text-white">🔥 Familiar</span>
+                                @if (oscuroMolido500?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-dark text-white">🔥 Familiar</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
@@ -277,9 +339,18 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (oscuroMolido500?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -287,11 +358,18 @@
 
             <!-- TUESTE MEDIO EN GRANO 250g -->
             <div class="col-lg-6 col-xl-4" data-category="grano">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(medioGrano250?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-info text-dark">🫘 Grano Entero</span>
+                                @if (medioGrano250?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info text-dark">🫘 Grano Entero</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
@@ -312,9 +390,18 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (medioGrano250?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -322,11 +409,18 @@
 
             <!-- TUESTE MEDIO EN GRANO 500g -->
             <div class="col-lg-6 col-xl-4" data-category="grano">
-                <div class="coffee-card fade-in-up h-100">
+                <div class="coffee-card fade-in-up h-100 @(medioGrano500?.Stock == 0 ? "out-of-stock" : "")">
                     <div class="card-body d-flex flex-column">
                         <div class="text-center mb-4">
                             <div class="product-badge mb-2">
-                                <span class="badge bg-info text-dark">🫘 Grano Entero</span>
+                                @if (medioGrano500?.Stock == 0)
+                                {
+                                    <span class="badge bg-danger">❌ Agotado</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-info text-dark">🫘 Premium</span>
+                                }
                             </div>
                             <div class="product-image-container mb-3">
                                 <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
@@ -347,14 +441,25 @@
                         </ul>
 
                         <div class="text-center mt-auto">
-                            <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
-                                Agregar al Pedido
-                            </a>
+                            @if (medioGrano500?.Stock > 0)
+                            {
+                                <a href="@Url.Action("Create", "Order")" class="btn btn-coffee">
+                                    Agregar al Pedido
+                                </a>
+                            }
+                            else
+                            {
+                                <button class="btn btn-secondary" disabled>
+                                    Agotado
+                                </button>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
-
+        </div>
+    </div>
+</section>
 
 <!-- Por Qué Elegir Section -->
 <section class="features-section">
@@ -365,7 +470,7 @@
                 Tres generaciones de experiencia se unen con la innovación para ofrecerte el mejor café artesanal de Costa Rica
             </p>
         </div>
-        
+
         <div class="row g-4">
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
@@ -374,7 +479,7 @@
                     <p>Cultivado cerca del volcán, nuestro café se beneficia de suelos ricos en minerales que le otorgan un sabor único e incomparable.</p>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
                     <i class="fas fa-hand-holding-heart feature-icon"></i>
@@ -382,7 +487,7 @@
                     <p>Cada grano es seleccionado a mano y procesado de manera natural, preservando todos los sabores y aromas originales.</p>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
                     <i class="fas fa-users feature-icon"></i>
@@ -391,7 +496,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row g-4 mt-4">
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
@@ -400,7 +505,7 @@
                     <p>Sin químicos artificiales, respetando los procesos naturales para un café puro que refleja la riqueza de nuestra tierra.</p>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
                     <i class="fas fa-award feature-icon"></i>
@@ -408,7 +513,7 @@
                     <p>El resultado de décadas de experiencia: un café con cuerpo, aroma intenso y notas distintivas que despiertan todos tus sentidos.</p>
                 </div>
             </div>
-            
+
             <div class="col-md-4">
                 <div class="feature-card fade-in-up">
                     <i class="fas fa-shipping-fast feature-icon"></i>

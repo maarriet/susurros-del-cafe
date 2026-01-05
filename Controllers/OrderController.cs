@@ -2,22 +2,25 @@
 using Susurros_del_Cafe_WEB.Services;
 using Susurros_del_Cafe_WEB.ViewModels;
 using Susurros_del_Cafe_WEB.Models;
+using Susurros_del_Cafe_WEB.Data;
 
 namespace Susurros_del_Cafe_WEB.Controllers
 {
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly ApplicationDbContext _context;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderService orderService, ApplicationDbContext context)
         {
             _orderService = orderService;
+            _context = context;
         }
 
-        // GET: Order/Create
         public IActionResult Create()
         {
             var model = new OrderViewModel();
+            ViewBag.Products = _context.Products.Where(p => p.IsActive).ToList();
             return View(model);
         }
 

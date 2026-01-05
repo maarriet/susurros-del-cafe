@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Susurros_del_Cafe_WEB.Data;
 using Susurros_del_Cafe_WEB.Models;
 
 namespace Susurros_del_Cafe_WEB.Controllers
@@ -7,15 +8,18 @@ namespace Susurros_del_Cafe_WEB.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var products = _context.Products.Where(p => p.IsActive).ToList();
+            return View(products);
         }
 
         public IActionResult Privacy()

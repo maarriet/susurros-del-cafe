@@ -853,3 +853,57 @@ h1, h2, h3, h4, h5, h6 {
         pointer-events: none;
     }
 
+/* Estilos para productos agotados */
+.coffee-card.out-of-stock {
+    opacity: 0.6;
+    filter: grayscale(50%);
+    position: relative;
+}
+
+    .coffee-card.out-of-stock::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: inherit;
+        z-index: 1;
+    }
+
+    .coffee-card.out-of-stock .product-image {
+        filter: grayscale(70%);
+    }
+
+    .coffee-card.out-of-stock .price-tag {
+        text-decoration: line-through;
+        opacity: 0.7;
+    }
+
+/* Badge de agotado más prominente */
+.badge.bg-danger {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.8rem;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Botón deshabilitado */
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}

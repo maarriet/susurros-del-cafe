@@ -1,6 +1,17 @@
 ﻿@model Susurros_del_Cafe_WEB.ViewModels.OrderViewModel
 @{
     ViewData["Title"] = "Realizar Pedido";
+    
+    // Obtener productos desde ViewBag
+    var products = ViewBag.Products as List<Susurros_del_Cafe_WEB.Models.Product> ?? new List<Susurros_del_Cafe_WEB.Models.Product>();
+    
+    // Definir variables de productos
+    var medioMolido250 = products.FirstOrDefault(p => p.Name == "Tueste Medio Molido 250g");
+    var medioMolido500 = products.FirstOrDefault(p => p.Name == "Tueste Medio Molido 500g");
+    var oscuroMolido250 = products.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 250g");
+    var oscuroMolido500 = products.FirstOrDefault(p => p.Name == "Tueste Oscuro Molido 500g");
+    var medioGrano250 = products.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 250g");
+    var medioGrano500 = products.FirstOrDefault(p => p.Name == "Tueste Medio en Grano 500g");
 }
 
 <!-- Hero Section del Pedido -->
@@ -39,11 +50,18 @@
                         <div class="row g-3">
 
                             <!-- TUESTE MEDIO MOLIDO 250g -->
-                            <div class="col-md-6 col-lg-4" data-category="molido">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="molido" style="@(medioMolido250?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(medioMolido250?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-warning text-dark">🌟 Popular</span>
+                                            @if (medioMolido250?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">🌟 Popular</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste medio 250g.png"
@@ -56,25 +74,40 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', -1)" @(medioMolido250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityMedioMolido250g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', 1)">
+                                            <input asp-for="QuantityMedioMolido250g" class="quantity-input" min="0" max="@(medioMolido250?.Stock ?? 50)" disabled="@(medioMolido250?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido250g', 1)" @(medioMolido250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (medioMolido250?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (medioMolido250?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(medioMolido250.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityMedioMolido250g" class="text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TUESTE MEDIO MOLIDO 500g -->
-                            <div class="col-md-6 col-lg-4" data-category="molido">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="molido" style="@(medioMolido500?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(medioMolido500?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-success">💰 Valor</span>
+                                            @if (medioMolido500?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">💰 Valor</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste medio 250g.png"
@@ -87,25 +120,40 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', -1)" @(medioMolido500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityMedioMolido500g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', 1)">
+                                            <input asp-for="QuantityMedioMolido500g" class="quantity-input" min="0" max="@(medioMolido500?.Stock ?? 50)" disabled="@(medioMolido500?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioMolido500g', 1)" @(medioMolido500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (medioMolido500?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (medioMolido500?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(medioMolido500.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityMedioMolido500g" class="text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TUESTE OSCURO MOLIDO 250g -->
-                            <div class="col-md-6 col-lg-4" data-category="molido">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="molido" style="@(oscuroMolido250?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(oscuroMolido250?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-dark text-white">🔥 Intenso</span>
+                                            @if (oscuroMolido250?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-dark text-white">🔥 Intenso</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
@@ -118,25 +166,40 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', -1)" @(oscuroMolido250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityOscuroMolido250g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', 1)">
+                                            <input asp-for="QuantityOscuroMolido250g" class="quantity-input" min="0" max="@(oscuroMolido250?.Stock ?? 50)" disabled="@(oscuroMolido250?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido250g', 1)" @(oscuroMolido250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (oscuroMolido250?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (oscuroMolido250?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(oscuroMolido250.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityOscuroMolido250g" class="text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TUESTE OSCURO MOLIDO 500g -->
-                            <div class="col-md-6 col-lg-4" data-category="molido">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="molido" style="@(oscuroMolido500?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(oscuroMolido500?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-dark text-white">🔥 Familiar</span>
+                                            @if (oscuroMolido500?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-dark text-white">🔥 Familiar</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste Oscuro 250g.png"
@@ -149,25 +212,40 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', -1)" @(oscuroMolido500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityOscuroMolido500g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', 1)">
+                                            <input asp-for="QuantityOscuroMolido500g" class="quantity-input" min="0" max="@(oscuroMolido500?.Stock ?? 50)" disabled="@(oscuroMolido500?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityOscuroMolido500g', 1)" @(oscuroMolido500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (oscuroMolido500?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (oscuroMolido500?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(oscuroMolido500.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityOscuroMolido500g" class="text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TUESTE MEDIO EN GRANO 250g -->
-                            <div class="col-md-6 col-lg-4" data-category="grano">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="grano" style="@(medioGrano250?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(medioGrano250?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-info text-dark">🫘 Grano</span>
+                                            @if (medioGrano250?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info text-dark">🫘 Grano</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
@@ -180,25 +258,40 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡2,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', -1)" @(medioGrano250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityMedioGrano250g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', 1)">
+                                            <input asp-for="QuantityMedioGrano250g" class="quantity-input" min="0" max="@(medioGrano250?.Stock ?? 50)" disabled="@(medioGrano250?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano250g', 1)" @(medioGrano250?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (medioGrano250?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (medioGrano250?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(medioGrano250.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityMedioGrano250g" class="text-danger small"></span>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- TUESTE MEDIO EN GRANO 500g -->
-                            <div class="col-md-6 col-lg-4" data-category="grano">
-                                <div class="product-card h-100" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
+                            <div class="col-md-6 col-lg-4" data-category="grano" style="@(medioGrano500?.Stock == 0 ? "display: none;" : "")">
+                                <div class="product-card h-100 @(medioGrano500?.Stock == 0 ? "out-of-stock" : "")" style="padding: 1.5rem; border-radius: 16px; transition: var(--transition);">
                                     <div class="text-center">
                                         <div class="product-badge mb-2">
-                                            <span class="badge bg-info text-dark">🫘 Premium</span>
+                                            @if (medioGrano500?.Stock == 0)
+                                            {
+                                                <span class="badge bg-danger">❌ Agotado</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-info text-dark">🫘 Premium</span>
+                                            }
                                         </div>
                                         <div class="product-image-container mb-3">
                                             <img src="~/images/products/Bolsa Tueste medio en grano 250g.png"
@@ -211,14 +304,22 @@
                                         <div style="font-size: 1.2rem; font-weight: 700; color: var(--coffee-primary); margin-bottom: 1rem;">₡4,500</div>
 
                                         <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', -1)">
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', -1)" @(medioGrano500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-minus"></i>
                                             </button>
-                                            <input asp-for="QuantityMedioGrano500g" class="quantity-input" min="0" max="50" />
-                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', 1)">
+                                            <input asp-for="QuantityMedioGrano500g" class="quantity-input" min="0" max="@(medioGrano500?.Stock ?? 50)" disabled="@(medioGrano500?.Stock == 0)" />
+                                            <button type="button" class="quantity-btn" onclick="changeQuantity('QuantityMedioGrano500g', 1)" @(medioGrano500?.Stock == 0 ? "disabled" : "")>
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
+                                        @if (medioGrano500?.Stock == 0)
+                                        {
+                                            <small class="text-danger mt-2 d-block">Producto agotado</small>
+                                        }
+                                        else if (medioGrano500?.Stock <= 5)
+                                        {
+                                            <small class="text-warning mt-2 d-block">¡Solo quedan @(medioGrano500.Stock) unidades!</small>
+                                        }
                                         <span asp-validation-for="QuantityMedioGrano500g" class="text-danger small"></span>
                                     </div>
                                 </div>
@@ -226,7 +327,6 @@
 
                         </div>
 
-                        <!-- Resto del formulario igual... -->
                         <!-- Información del Cliente -->
                         <div class="mb-5 mt-5">
                             <div class="d-flex align-items-center mb-4">
@@ -312,7 +412,7 @@
             </div>
         </div>
 
-        <!-- Resumen del Pedido Actualizado -->
+        <!-- Resumen del Pedido -->
         <div class="col-lg-4">
             <div class="order-summary" id="order-summary" style="display: none;">
                 <div class="summary-header">
@@ -403,8 +503,11 @@
     <script>
         function changeQuantity(inputId, change) {
             const input = document.getElementById(inputId);
+            if (input.disabled) return;
+            
             const currentValue = parseInt(input.value) || 0;
-            const newValue = Math.max(0, Math.min(50, currentValue + change));
+            const maxValue = parseInt(input.getAttribute('max')) || 50;
+            const newValue = Math.max(0, Math.min(maxValue, currentValue + change));
             input.value = newValue;
 
             // Trigger change event to update summary
@@ -437,7 +540,7 @@
         });
 
         // Mejorar la animación de las tarjetas de producto
-        document.querySelectorAll('.product-card').forEach(card => {
+        document.querySelectorAll('.product-card:not(.out-of-stock)').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-5px)';
                 this.style.boxShadow = 'var(--shadow-medium)';
@@ -462,13 +565,16 @@
 
             let hasProducts = false;
             quantities.forEach(id => {
-                const qty = parseInt(document.getElementById(id).value) || 0;
-                if (qty > 0) hasProducts = true;
+                const input = document.getElementById(id);
+                if (input && !input.disabled) {
+                    const qty = parseInt(input.value) || 0;
+                    if (qty > 0) hasProducts = true;
+                }
             });
 
             if (!hasProducts) {
                 e.preventDefault();
-                alert('Por favor selecciona al menos un producto');
+                alert('Por favor selecciona al menos un producto disponible');
                 return false;
             }
         });
