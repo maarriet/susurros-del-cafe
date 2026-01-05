@@ -578,5 +578,101 @@
                 return false;
             }
         });
+                const stockLimits = {
+            'QuantityMedioMolido250g': @(medioMolido250?.Stock ?? 0),
+            'QuantityMedioMolido500g': @(medioMolido500?.Stock ?? 0),
+            'QuantityOscuroMolido250g': @(oscuroMolido250?.Stock ?? 0),
+            'QuantityOscuroMolido500g': @(oscuroMolido500?.Stock ?? 0),
+            'QuantityMedioGrano250g': @(medioGrano250?.Stock ?? 0),
+            'QuantityMedioGrano500g': @(medioGrano500?.Stock ?? 0)
+        };
+
+        const productNames = {
+            'QuantityMedioMolido250g': 'Tueste Medio Molido 250g',
+            'QuantityMedioMolido500g': 'Tueste Medio Molido 500g',
+            'QuantityOscuroMolido250g': 'Tueste Oscuro Molido 250g',
+            'QuantityOscuroMolido500g': 'Tueste Oscuro Molido 500g',
+            'QuantityMedioGrano250g': 'Tueste Medio en Grano 250g',
+            'QuantityMedioGrano500g': 'Tueste Medio en Grano 500g'
+        };
+
+        // Función para validar stock en tiempo real
+        function validateStock(inputId) {
+            const input = document.getElementById(inputId);
+            const quantity = parseInt(input.value) || 0;
+            const maxStock = stockLimits[inputId];
+            const productName = productNames[inputId];
+
+            // Limpiar errores previos
+            const existingError = input.parentNode.parentNode.querySelector('.stock-error');
+            if (existingError) {
+                existingError.remove();
+            }
+
+            // Validar stock
+            if (quantity > 0 && maxStock === 0) {
+                showStockError(input, `${productName} está agotado`);
+                input.value = 0;
+                input.dispatchEvent(new Event('input')); // Actualizar resumen
+                return false;
+            } else if (quantity > maxStock) {
+                showStockError(input, `Solo quedan ${maxStock} unidades de ${productName}`);
+                input.value = maxStock;
+                input.dispatchEvent(new Event('input')); // Actualizar resumen
+                return false;
+            }
+
+            return true;
+        }
+
+        // Función para mostrar errores de stock
+        function showStockError(input, message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'stock-error alert alert-warning mt-2 py-1 px-2 small';
+            errorDiv.style.fontSize = '0.8rem';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle me-1"></i>${message}`;
+
+            input.parentNode.parentNode.appendChild(errorDiv);
+
+            // Auto-remover después de 3 segundos
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 3000);
+        }
+
+        // Agregar listeners a todos los inputs de cantidad
+        document.addEventListener('DOMContentLoaded', function() {
+            Object.keys(stockLimits).forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('input', function() {
+                        validateStock(inputId);
+                    });
+
+                    input.addEventListener('change', function() {
+                        validateStock(inputId);
+                    });
+                }
+            });
+        });
+
+        // Actualizar la función changeQuantity existente
+        function changeQuantity(inputId, change) {
+            const input = document.getElementById(inputId);
+            if (input.disabled) return;
+
+            const currentValue = parseInt(input.value) || 0;
+            const maxValue = stockLimits[inputId] || parseInt(input.getAttribute('max')) || 50;
+            const newValue = Math.max(0, Math.min(maxValue, currentValue + change));
+            input.value = newValue;
+
+            // Validar stock y actualizar resumen
+            validateStock(inputId);
+            input.dispatchEvent(new Event('input'));
+        }
+
+
     </script>
 }
